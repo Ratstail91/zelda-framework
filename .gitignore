@@ -1,0 +1,26 @@
+#Editor generated files
+*.sln
+*.vcproj
+*.suo
+*.ncb
+*.user
+
+#Directories
+Release/
+Debug/
+Out/
+Obj/
+release/
+debug/
+out/
+obj/
+
+#Project generated files
+*.db
+*.o
+*.a
+*.exe
+
+#Shell files
+*.bat
+*.sh
