@@ -4,6 +4,8 @@
 
 class ExampleScene : public BaseScene {
 public:
+	DECLARE_BLOCKING;
+
 	ExampleScene();
 	virtual ~ExampleScene();
 

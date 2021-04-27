@@ -4,6 +4,10 @@
 
 #include "SDL2/SDL.h"
 
+#define DECLARE_HIDING bool GetHiding() const override { return true; }
+#define DECLARE_BLOCKING bool GetBlocking() const override { return true; }
+#define DECLARE_FREEZING bool GetFreezing() const override { return true; }
+
 class BaseScene {
 public:
 	BaseScene();
@@ -11,7 +15,14 @@ public:
 
 	virtual void RenderFrame(SDL_Renderer*);
 	static void SetRenderer(SDL_Renderer*);
+
+	void SetSceneSignal(SceneSignal);
 	SceneSignal GetSceneSignal();
+
+	//hiding & blocking signals
+	virtual bool GetHiding() const { return false; }
+	virtual bool GetBlocking() const { return false; }
+	virtual bool GetFreezing() const { return false; }
 
 	//frame phases
 	virtual void FrameStart();
@@ -34,7 +45,6 @@ public:
 protected:
 	//control
 	static SDL_Renderer* GetRenderer();
-	void SetSceneSignal(SceneSignal);
 
 private:
 	static SDL_Renderer* rendererHandle;

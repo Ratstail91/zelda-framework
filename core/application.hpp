@@ -5,6 +5,7 @@
 
 #include "SDL2/SDL.h"
 
+#include <list>
 #include <map>
 
 //DOCS: The Application class handles scene switching, utilizing only one window
@@ -21,9 +22,9 @@ private:
 	//scene management
 	void ProcessEvents();
 	void ProcessSceneSignal(SceneSignal);
-	void ClearScene();
+	void PopScene();
 
-	BaseScene* activeScene = nullptr;
+	std::list<BaseScene*> sceneList;
 
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;

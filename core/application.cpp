@@ -57,10 +57,10 @@ void Application::Proc() {
 	constexpr std::chrono::duration<int, std::milli> frameDelay(16); //~60FPS
 
 	//the game loop continues until the scenes signal QUIT
-	while(activeScene->GetSceneSignal() != SceneSignal::QUIT) {
+	while(sceneList.size() > 0 && sceneList.front()->GetSceneSignal() != SceneSignal::QUIT) {
 		//switch scenes if necessary
-		if(activeScene->GetSceneSignal() != SceneSignal::CONTINUE) {
-			ProcessSceneSignal(activeScene->GetSceneSignal());
+		if(sceneList.front()->GetSceneSignal() != SceneSignal::CONTINUE) {
+			ProcessSceneSignal(sceneList.front()->GetSceneSignal());
 			continue;
 		}
 
@@ -71,10 +71,28 @@ void Application::Proc() {
 		if (simTime < realTime) {
 			while(simTime < realTime) {
 				//call the user defined functions
-				activeScene->FrameStart();
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->FrameStart();
+					if ((*it)->GetFreezing()) {
+						break;
+					}
+				}
+
 				ProcessEvents();
-				activeScene->Update();
-				activeScene->FrameEnd();
+
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->Update();
+					if ((*it)->GetFreezing()) {
+						break;
+					}
+				}
+
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->FrameEnd();
+					if ((*it)->GetFreezing()) {
+						break;
+					}
+				}
 
 				//step to the next frame
 				simTime += frameDelay;
@@ -88,17 +106,24 @@ void Application::Proc() {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		//actually render
-		activeScene->RenderFrame(renderer);
+		//actually render (from the highest hiding member forward)
+		std::list<BaseScene*>::iterator it = sceneList.begin();
+		while(std::next(it, 1) != sceneList.end() && !(*it)->GetHiding()) {
+			it++; //search up the first hiding member
+		}
+		do {
+			(*it)->RenderFrame(renderer);
+			it--;
+		} while(std::next(it, 1) != sceneList.begin()); //while still pointing to the list
 		SDL_RenderPresent(renderer);
 	}
-
-	//cleanup
-	ClearScene();
 }
 
 void Application::Quit() {
 	//clean up after the program
+	for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+		delete *it;
+	}
 	for (auto it : gameControllers) {
 		SDL_GameControllerClose(it.second);
 	}
@@ -115,48 +140,95 @@ void Application::ProcessEvents() {
 		switch(event.type) {
 			//default
 			case SDL_QUIT:
-				activeScene->QuitEvent();
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->QuitEvent();
+				}
 			break;
 
 			//mouse events
 			case SDL_MOUSEMOTION:
-				activeScene->MouseMotion(event.motion);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->MouseMotion(event.motion);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				activeScene->MouseButtonDown(event.button);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->MouseButtonDown(event.button);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_MOUSEBUTTONUP:
-				activeScene->MouseButtonUp(event.button);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->MouseButtonUp(event.button);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_MOUSEWHEEL:
-				activeScene->MouseWheel(event.wheel);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->MouseWheel(event.wheel);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			//keyboard events
 			case SDL_KEYDOWN:
-				activeScene->KeyDown(event.key);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->KeyDown(event.key);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_KEYUP:
-				activeScene->KeyUp(event.key);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->KeyUp(event.key);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			//TODO: joystick events
 
 			//controller events
 			case SDL_CONTROLLERAXISMOTION:
-				activeScene->ControllerAxisMotion(event.caxis);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->ControllerAxisMotion(event.caxis);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_CONTROLLERBUTTONDOWN:
-				activeScene->ControllerButtonDown(event.cbutton);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->ControllerButtonDown(event.cbutton);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_CONTROLLERBUTTONUP:
-				activeScene->ControllerButtonUp(event.cbutton);
+				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+					(*it)->ControllerButtonUp(event.cbutton);
+					if ((*it)->GetBlocking()) {
+						break;
+					}
+				}
 			break;
 
 			case SDL_CONTROLLERDEVICEADDED: {
@@ -198,12 +270,14 @@ void Application::ProcessEvents() {
 
 //TODO: code generation to do this?
 void Application::ProcessSceneSignal(SceneSignal signal) {
-	ClearScene();
-
 	switch(signal) {
 		case SceneSignal::FIRST: //for the first scene to be loaded
 		case SceneSignal::EXAMPLE_SCENE:
-			activeScene = new ExampleScene();
+			sceneList.push_front(new ExampleScene());
+		break;
+
+		case SceneSignal::POP:
+			PopScene();
 		break;
 
 		default: {
@@ -212,7 +286,12 @@ void Application::ProcessSceneSignal(SceneSignal signal) {
 	}
 }
 
-void Application::ClearScene() {
-	delete activeScene;
-	activeScene = nullptr;
+void Application::PopScene() {
+	delete sceneList.front();
+	sceneList.pop_front();
+
+	//reset the scene signal when there's nothing on top of that scene
+	if (sceneList.size() > 0) {
+		sceneList.front()->SetSceneSignal(SceneSignal::CONTINUE);
+	}
 }
