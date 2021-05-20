@@ -4,8 +4,13 @@
 
 #include "SDL2/SDL.h"
 
+//hide lower scenes
 #define DECLARE_HIDING bool GetHiding() const override { return true; }
+
+//stop input to lower scenes
 #define DECLARE_BLOCKING bool GetBlocking() const override { return true; }
+
+//freeze simulation in lower scenes
 #define DECLARE_FREEZING bool GetFreezing() const override { return true; }
 
 class BaseScene {

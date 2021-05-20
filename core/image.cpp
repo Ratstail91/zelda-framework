@@ -17,6 +17,8 @@ Image& Image::operator=(Image const& rhs) {
 	texture = rhs.texture;
 	clip = rhs.clip;
 	local = false;
+
+	return *this;
 }
 
 Image& Image::operator=(Image&& rhs) {
@@ -35,9 +37,11 @@ Image& Image::operator=(Image&& rhs) {
 	rhs.texture = nullptr;
 	rhs.clip = {0, 0, 0, 0};
 	rhs.local = false;
+
+	return *this;
 }
 
-SDL_Texture* Image::Load(SDL_Renderer* renderer, std::string fname) {
+SDL_Texture* Image::Load(SDL_Renderer* const renderer, std::string fname) {
 	Free();
 
 	//load the file into a surface
@@ -74,7 +78,7 @@ SDL_Texture* Image::Load(SDL_Renderer* renderer, std::string fname) {
 	return texture;
 }
 
-SDL_Texture* Image::Create(SDL_Renderer* renderer, Uint16 w, Uint16 h, SDL_Color blank) {
+SDL_Texture* Image::Create(SDL_Renderer* const renderer, Uint16 w, Uint16 h, SDL_Color blank) {
 	Free();
 
 	//make the texture
@@ -111,7 +115,7 @@ SDL_Texture* Image::Create(SDL_Renderer* renderer, Uint16 w, Uint16 h, SDL_Color
 	return texture;
 }
 
-SDL_Texture* Image::CopyTexture(SDL_Renderer* renderer, SDL_Texture* ptr) {
+SDL_Texture* Image::CopyTexture(SDL_Renderer* const renderer, SDL_Texture* const ptr) {
 	Free();
 	int w = 0, h = 0;
 

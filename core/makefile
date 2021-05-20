@@ -8,7 +8,7 @@ ifeq ($(OS),Windows_NT)
 	LIBS+=-lmingw32 -lSDL2main
 endif
 ifeq ($(shell uname), Linux)
-	LIBS+=
+	LIBS+=-static-libstdc++
 endif
 LIBS+=-lSDL2 -lSDL2_image
 

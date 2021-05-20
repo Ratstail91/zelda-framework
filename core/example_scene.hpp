@@ -2,6 +2,8 @@
 
 #include "base_scene.hpp"
 
+#include "actor.hpp"
+
 class ExampleScene : public BaseScene {
 public:
 	DECLARE_BLOCKING;
@@ -27,4 +29,8 @@ private:
 	void ControllerAxisMotion(SDL_ControllerAxisEvent const& event) override;
 	void ControllerButtonDown(SDL_ControllerButtonEvent const& event) override;
 	void ControllerButtonUp(SDL_ControllerButtonEvent const& event) override;
+
+	//debugging
+	Actor dragon;
+	Actor wall;
 };

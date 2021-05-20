@@ -17,9 +17,9 @@ public:
 	Image& operator=(Image const&);
 	Image& operator=(Image&&);
 
-	SDL_Texture* Load(SDL_Renderer* renderer, std::string fname);
-	SDL_Texture* Create(SDL_Renderer* renderer, Uint16 w, Uint16 h, SDL_Color blank = {0, 0, 0, 255});
-	SDL_Texture* CopyTexture(SDL_Renderer* renderer, SDL_Texture* ptr);
+	SDL_Texture* Load(SDL_Renderer* const renderer, std::string fname);
+	SDL_Texture* Create(SDL_Renderer* const renderer, Uint16 w, Uint16 h, SDL_Color blank = {0, 0, 0, 255});
+	SDL_Texture* CopyTexture(SDL_Renderer* const renderer, SDL_Texture* const ptr);
 	SDL_Texture* SetTexture(SDL_Texture*);
 	SDL_Texture* GetTexture() const;
 	virtual void Free();
