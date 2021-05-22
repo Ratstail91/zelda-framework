@@ -32,15 +32,5 @@ OUT=$(addprefix $(OUTDIR)/,out)
 all: $(OBJ) $(OUT)
 	$(CXX) $(CXXFLAGS) -o $(OUT) $(OBJ) $(LIBS)
 
-$(OBJ): | $(OBJDIR)
-
-$(OUT): | $(OUTDIR)
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-$(OUTDIR):
-	mkdir $(OUTDIR)
-
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
