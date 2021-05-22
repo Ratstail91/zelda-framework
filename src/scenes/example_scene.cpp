@@ -7,26 +7,41 @@ ExampleScene::ExampleScene() {
 
 	//ground
 	root.GetChild(0)->AddChild(new NodeTransform());
-
-	((NodeTransform*)(root.GetChild(0)->GetChild(-1)))->GetPosition()->y = 400;
-
 	root.GetChild(0)->AddChild(new NodeImage(GetRenderer(), "rsc/thing.png"));
 	root.GetChild(0)->AddChild(new NodeColliderBox());
-
-	((NodeColliderBox*)(root.GetChild(0)->GetChild(-1)))->SetBoundsToImageSibling();
 
 	//dragon
 	root.GetChild(1)->AddChild(new NodeTransform());
 	root.GetChild(1)->AddChild(new NodeImage(GetRenderer(), "rsc/fairy dragon.png"));
 	root.GetChild(1)->AddChild(new NodeColliderBox());
-
-	((NodeColliderBox*)(root.GetChild(1)->GetChild(-1)))->SetBoundsToImageSibling();
-
 	root.GetChild(1)->AddChild(new NodeActor());
+
+	((NodeTransform*)(root.GetChild(0)->GetChild(0)))->GetPosition()->y = 400;
+
+	std::list<NodeColliderBox*> colliderBoxes = root.GetChildrenByType<NodeColliderBox>();
+
+	for (NodeColliderBox* box : colliderBoxes) {
+		box->SetBoundsToImageSibling();
+	}
+}
+
+static void deleteNode(NodeBase* root) {
+	while (true) {
+		NodeBase* child = root->GetChild(0);
+
+		if (child == nullptr) {
+			break;
+		}
+
+		deleteNode(child);
+
+		root->RemoveChild(0);
+		delete child;
+	}
 }
 
 ExampleScene::~ExampleScene() {
-	//EMPTY
+	deleteNode(&root);
 }
 
 //frame phases
@@ -80,7 +95,7 @@ void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {
 	//preference as a default
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE:
-			QuitEvent();
+			SetSceneSignal(SceneSignal::POP);
 		break;
 
 		case SDLK_SPACE:

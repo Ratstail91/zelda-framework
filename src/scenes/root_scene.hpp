@@ -8,14 +8,14 @@
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
 
-class ExampleScene : public BaseScene {
+class RootScene : public BaseScene {
 public:
 	DECLARE_HIDING;
 	DECLARE_BLOCKING;
 	DECLARE_FREEZING;
 
-	ExampleScene();
-	virtual ~ExampleScene();
+	RootScene();
+	virtual ~RootScene();
 
 	void RenderFrame(SDL_Renderer* renderer) override;
 

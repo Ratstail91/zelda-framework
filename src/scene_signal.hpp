@@ -9,5 +9,7 @@ enum SceneSignal {
 	FIRST = 1,
 
 	//custom scenes
+	ROOT_SCENE,
 	EXAMPLE_SCENE,
+	EDITOR_SCENE,
 };
