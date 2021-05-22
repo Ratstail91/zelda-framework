@@ -2,7 +2,7 @@
 
 #include "image.hpp"
 #include "vector2.hpp"
-#include "box_collider.hpp"
+#include "collider_box.hpp"
 
 #include "SDL2/SDL.h"
 
@@ -27,11 +27,11 @@ public:
 	Image* GetImage() { return &image; }
 	Vector2* GetPosition() { return &position; }
 	Vector2* GetMotion() { return &motion; }
-	BoxCollider* GetCollider() { return &collider; }
+	ColliderBox* GetCollider() { return &collider; }
 
 protected:
 	Image image;
 	Vector2 position = {0, 0};
 	Vector2 motion = {0, 0};
-	BoxCollider collider = {{0, 0}, {0, 0}};
+	ColliderBox collider = {{0, 0}, {0, 0}};
 };

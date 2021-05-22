@@ -31,15 +31,15 @@ void Actor::Update(Vector2 gravity, double friction) {
 }
 
 bool Actor::Intersect(Actor const& other) {
-	BoxCollider me = collider + position;
-	BoxCollider you = other.collider + other.position;
+	ColliderBox me = collider + position;
+	ColliderBox you = other.collider + other.position;
 
 	return me.Intersect(you);
 }
 
 void Actor::SnapCollide(Actor const& other) {
-	BoxCollider me = collider + position;
-	BoxCollider you = other.collider + other.position;
+	ColliderBox me = collider + position;
+	ColliderBox you = other.collider + other.position;
 
 	Vector2 jump = me.Snap(you);
 

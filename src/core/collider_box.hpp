@@ -5,17 +5,16 @@
 
 #include "vector2.hpp"
 
-//TODO: rename to ColliderBox
-class BoxCollider {
+class ColliderBox {
 public:
 	Vector2 center;
 	Vector2 halfSize;
 
-	BoxCollider() = default;
-	~BoxCollider() = default;
-	BoxCollider& operator=(BoxCollider const&) = default;
+	ColliderBox() = default;
+	~ColliderBox() = default;
+	ColliderBox& operator=(ColliderBox const&) = default;
 
-	bool Intersect(BoxCollider const& other) const {
+	bool Intersect(ColliderBox const& other) const {
 		//x-direction
 		if (center.x - halfSize.x > other.center.x + other.halfSize.x) {
 			return false;
@@ -38,7 +37,7 @@ public:
 	}
 
 	//returns the new center of this bounding box (up to the calling context to set the actual position)
-	Vector2 Snap(BoxCollider const& other) const {
+	Vector2 Snap(ColliderBox const& other) const {
 		//do nothing if no intersection
 		if (!Intersect(other)) {
 			return Vector2(0.0, 0.0);
@@ -57,17 +56,17 @@ public:
 	}
 
 	//arithmetic operators
-	BoxCollider operator+(Vector2 v) const {
+	ColliderBox operator+(Vector2 v) const {
 		//adjust position
-		BoxCollider box;
+		ColliderBox box;
 		box.center = center + v;
 		box.halfSize = halfSize;
 		return box;
 	}
 
 	//member templates (curry the above operators)
-	template<typename T> BoxCollider operator+=(T t) { return *this = *this + t; }
+	template<typename T> ColliderBox operator+=(T t) { return *this = *this + t; }
 };
 
 //This is explicitly a POD
-static_assert(std::is_pod<BoxCollider>::value, "BoxCollider is not a POD");
+static_assert(std::is_pod<ColliderBox>::value, "ColliderBox is not a POD");

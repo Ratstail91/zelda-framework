@@ -4,7 +4,7 @@
 
 #include "node_base.hpp"
 #include "node_image.hpp"
-#include "node_box_collider.hpp"
+#include "node_collider_box.hpp"
 
 class ExampleScene : public BaseScene {
 public:
