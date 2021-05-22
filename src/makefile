@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=. core scenes
+INCLUDES+=. core core/nodes scenes
 
 #libraries
 #the order of the $(LIBS) is important, at least for MinGW
@@ -18,6 +18,7 @@ CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES))
 #source
 CXXSRC=$(wildcard *.cpp) \
 	$(wildcard core/*.cpp) \
+	$(wildcard core/nodes/*.cpp) \
 	$(wildcard scenes/*.cpp)
 
 #objects

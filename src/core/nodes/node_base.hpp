@@ -3,8 +3,6 @@
 #include <list>
 #include <typeinfo>
 
-#include <iostream>
-
 class NodeBase {
 public:
 	NodeBase() = default;
@@ -15,10 +13,16 @@ public:
 	NodeBase* GetChild(int index);
 	void RemoveChild(int index);
 
+	NodeBase* GetParent() const { return parent; }
+
 	template<typename T>
 	std::list<T*> GetChildrenByType();
 
+	template<typename T>
+	T* GetFirstChildByType();
+
 protected:
+	NodeBase* parent = nullptr;
 	std::list<NodeBase*> children;
 };
 
@@ -32,11 +36,24 @@ std::list<T*> NodeBase::GetChildrenByType() {
 		T* ptr = dynamic_cast<T*>(*it);
 		if (ptr != nullptr) {
 			result.push_back(ptr);
-
-			std::list<T*> c = ((NodeBase*)ptr)->GetChildrenByType<T>();
-			result.splice(result.end(), c);
 		}
+
+		std::list<T*> c = (*it)->GetChildrenByType<T>();
+		result.splice(result.end(), c);
 	}
 
 	return result;
+}
+
+template<typename T>
+T* NodeBase::GetFirstChildByType() {
+	//find only the first immediate child of a type
+	for (std::list<NodeBase*>::iterator it = children.begin(); it != children.end(); it++) {
+		T* ptr = dynamic_cast<T*>(*it);
+		if (ptr != nullptr) {
+			return ptr;
+		}
+	}
+
+	return nullptr;
 }

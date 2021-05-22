@@ -3,6 +3,8 @@
 #include "base_scene.hpp"
 
 #include "node_base.hpp"
+#include "node_transform.hpp"
+#include "node_actor.hpp"
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
 
