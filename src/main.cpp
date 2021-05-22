@@ -5,10 +5,6 @@
 #include <iostream>
 #include <stdexcept>
 
-//POD checks
-#include "vector2.hpp"
-#include "box_collider.hpp"
-
 int main(int argc, char* argv[]) {
 	std::cout << "Beginning " << argv[0] << std::endl;
 	try {

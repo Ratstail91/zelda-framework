@@ -11,7 +11,7 @@ OUTDIR=out
 BINDIR=bin
 
 all: $(OUTDIR) binary
-	$(MAKE) -C core
+	$(MAKE) -C src
 
 debug: export CXXFLAGS+=-g
 debug: clean all

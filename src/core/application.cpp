@@ -5,7 +5,7 @@
 #include <sstream>
 #include <stdexcept>
 
-void error(std::string str) {
+static void error(std::string str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
 	throw(std::runtime_error(msg.str()));
@@ -261,27 +261,6 @@ void Application::ProcessEvents() {
 					break;
 				}
 			break;
-		}
-	}
-}
-
-//Add the custom scene headers here
-#include "example_scene.hpp"
-
-//TODO: code generation to do this?
-void Application::ProcessSceneSignal(SceneSignal signal) {
-	switch(signal) {
-		case SceneSignal::FIRST: //for the first scene to be loaded
-		case SceneSignal::EXAMPLE_SCENE:
-			sceneList.push_front(new ExampleScene());
-		break;
-
-		case SceneSignal::POP:
-			PopScene();
-		break;
-
-		default: {
-			error("Failed to recognize the scene signal");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=.
+INCLUDES+=. core scenes
 
 #libraries
 #the order of the $(LIBS) is important, at least for MinGW
@@ -16,15 +16,17 @@ LIBS+=-lSDL2 -lSDL2_image
 CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES))
 
 #source
-CXXSRC=$(wildcard *.cpp)
+CXXSRC=$(wildcard *.cpp) \
+	$(wildcard core/*.cpp) \
+	$(wildcard scenes/*.cpp)
 
 #objects
 OBJDIR=obj
-OBJ+=$(addprefix $(OBJDIR)/,$(CXXSRC:.cpp=.o))
+OBJ+=$(CXXSRC:.cpp=.o)
 
 #output
 OUTDIR=../out
-OUT=$(addprefix $(OUTDIR)/,zelda)
+OUT=$(addprefix $(OUTDIR)/,out)
 
 #targets
 all: $(OBJ) $(OUT)
@@ -40,16 +42,5 @@ $(OBJDIR):
 $(OUTDIR):
 	mkdir $(OUTDIR)
 
-$(OBJDIR)/%.o: %.cpp
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-clean:
-ifeq ($(OS),Windows_NT)
-	$(RM) *.o *.a *.exe
-else ifeq ($(shell uname), Linux)
-	find . -type f -name '*.o' -exec rm -f -r -v {} \;
-	find . -type f -name '*.a' -exec rm -f -r -v {} \;
-	rm -f -v $(OUT)
-endif
-
-rebuild: clean all
