@@ -19,7 +19,7 @@ public:
 	void DrawTo(SDL_Renderer* const renderer, Vector2 camera);
 
 	//simulation
-	void Update(Vector2 gravity = {0, 0}, double friction = 1.0);
+	void Update(Vector2 gravity = {0, 0}, double friction = 0.0);
 	bool Intersect(Actor const& other);
 	void SnapCollide(Actor const& other);
 
