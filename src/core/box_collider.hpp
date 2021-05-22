@@ -5,6 +5,7 @@
 
 #include "vector2.hpp"
 
+//TODO: rename to ColliderBox
 class BoxCollider {
 public:
 	Vector2 center;

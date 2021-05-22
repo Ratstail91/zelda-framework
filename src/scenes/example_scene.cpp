@@ -5,12 +5,10 @@
 ExampleScene::ExampleScene() {
 	//EMPTY
 
-	dragon.LoadSprite(GetRenderer(), "rsc/fairy dragon.png");
-	wall.LoadSprite(GetRenderer(), "rsc/thing.png");
+	root.AddChild(new NodeImage(GetRenderer(), "rsc/thing.png"));
+	NodeBase* child = root.GetChild(0);
 
-	//debug
-	wall.GetPosition()->x = 200;
-	wall.GetPosition()->y = 400;
+	child->AddChild(new NodeImage(GetRenderer(), "rsc/fairy dragon.png"));
 }
 
 ExampleScene::~ExampleScene() {
@@ -26,19 +24,21 @@ void ExampleScene::Update() {
 	Vector2 gravity = {0, 0.1};
 	double friction = 0.01;
 
-	dragon.Update(gravity, friction);
-	wall.Update({0, 0}, friction);
+	//TODO
 }
 
 void ExampleScene::FrameEnd() {
-	dragon.SnapCollide(wall);
+	//
 }
 
 void ExampleScene::RenderFrame(SDL_Renderer* renderer) {
 	Vector2 camera = {0, 0};
 
-	dragon.DrawTo(renderer, camera);
-	wall.DrawTo(renderer, camera);
+	auto images = root.GetChildrenByType<NodeImage>();
+
+	for (auto it = images.begin(); it != images.end(); it++) {
+		(*it)->DrawTo(renderer, camera.x, camera.y);
+	}
 }
 
 //input events
@@ -66,17 +66,17 @@ void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {
 		break;
 
 		case SDLK_SPACE:
-			dragon.GetMotion()->y = -8;
+			//
 		break;
 
 		case SDLK_LEFT:
 		case SDLK_a:
-			dragon.GetMotion()->x = -1;
+			//
 		break;
 
 		case SDLK_RIGHT:
 		case SDLK_d:
-			dragon.GetMotion()->x = 1;
+			//
 		break;
 	}
 }

@@ -2,7 +2,9 @@
 
 #include "base_scene.hpp"
 
-#include "actor.hpp"
+#include "node_base.hpp"
+#include "node_image.hpp"
+#include "node_box_collider.hpp"
 
 class ExampleScene : public BaseScene {
 public:
@@ -31,6 +33,5 @@ private:
 	void ControllerButtonUp(SDL_ControllerButtonEvent const& event) override;
 
 	//debugging
-	Actor dragon;
-	Actor wall;
+	NodeBase root;
 };
