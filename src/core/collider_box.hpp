@@ -44,14 +44,16 @@ public:
 		}
 
 		//snap to the closest position outside of other
-		double jumpX = -(halfSize.x + other.halfSize.x -fabs(center.x - other.center.x));
-		double jumpY = -(halfSize.y + other.halfSize.y -fabs(center.y - other.center.y));
+		double jumpX = halfSize.x + other.halfSize.x - fabs(center.x - other.center.x);
+		double jumpY = halfSize.y + other.halfSize.y - fabs(center.y - other.center.y);
 
 		//floating ABS
 		if (fabs(jumpX) < fabs(jumpY)) {
-			return Vector2(jumpX, 0);
+			//multiply by direction
+			return Vector2(jumpX, 0) * (center.x > other.center.x ? 1 : -1);
 		} else {
-			return Vector2(0, jumpY);
+			//multiply by direction
+			return Vector2(0, jumpY) * (center.y > other.center.y ? 1 : -1);
 		}
 	}
 
