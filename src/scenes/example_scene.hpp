@@ -8,6 +8,8 @@
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
 
+#include "camera_editor.hpp"
+
 class ExampleScene : public BaseScene {
 public:
 	DECLARE_HIDING;
@@ -36,6 +38,7 @@ private:
 	void ControllerButtonDown(SDL_ControllerButtonEvent const& event) override;
 	void ControllerButtonUp(SDL_ControllerButtonEvent const& event) override;
 
-	//debugging
+	//members
 	NodeBase root;
+	CameraEditor camera;
 };

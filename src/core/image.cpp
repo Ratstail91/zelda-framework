@@ -171,7 +171,7 @@ void Image::DrawTo(SDL_Renderer* const renderer, Sint16 x, Sint16 y, double scal
 		throw(std::logic_error("No image texture to draw"));
 	}
 	SDL_Rect sclip = clip;
-	SDL_Rect dclip = {x, y, Uint16(clip.w * scaleX), Uint16(clip.h * scaleY)};
+	SDL_Rect dclip = {(Sint16)(x * scaleX), (Sint16)(y * scaleY), Uint16(clip.w * scaleX), Uint16(clip.h * scaleY)};
 	SDL_RenderCopy(renderer, texture, &sclip, &dclip);
 }
 

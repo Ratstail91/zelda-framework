@@ -42,19 +42,19 @@ void EditorScene::RenderFrame(SDL_Renderer* renderer) {
 
 //input events
 void EditorScene::MouseMotion(SDL_MouseMotionEvent const& event) {
-	//
+	camera.MouseMotion(event);
 }
 
 void EditorScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
-	//
+	camera.MouseButtonDown(event);
 }
 
 void EditorScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
-	//
+	camera.MouseButtonUp(event);
 }
 
 void EditorScene::MouseWheel(SDL_MouseWheelEvent const& event) {
-	//
+	camera.MouseWheel(event, GetRenderer());
 }
 
 void EditorScene::KeyDown(SDL_KeyboardEvent const& event) {

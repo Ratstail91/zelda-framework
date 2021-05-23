@@ -65,30 +65,28 @@ void ExampleScene::FrameEnd() {
 }
 
 void ExampleScene::RenderFrame(SDL_Renderer* renderer) {
-	Vector2 camera = {0, 0};
-
 	auto images = root.GetChildrenByType<NodeImage>();
 
 	for (auto it = images.begin(); it != images.end(); it++) {
-		(*it)->DrawTo(renderer, camera.x, camera.y);
+		(*it)->DrawTo(renderer, camera.GetPosition()->x, camera.GetPosition()->y, camera.GetScale()->x, camera.GetScale()->y);
 	}
 }
 
 //input events
 void ExampleScene::MouseMotion(SDL_MouseMotionEvent const& event) {
-	//
+	camera.MouseMotion(event);
 }
 
 void ExampleScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
-	//
+	camera.MouseButtonDown(event);
 }
 
 void ExampleScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
-	//
+	camera.MouseButtonUp(event);
 }
 
 void ExampleScene::MouseWheel(SDL_MouseWheelEvent const& event) {
-	//
+	camera.MouseWheel(event, GetRenderer());
 }
 
 void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {

@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=. core core/nodes scenes
+INCLUDES+=. core core/nodes scenes tools
 
 #libraries
 #the order of the $(LIBS) is important, at least for MinGW
@@ -19,7 +19,8 @@ CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES))
 CXXSRC=$(wildcard *.cpp) \
 	$(wildcard core/*.cpp) \
 	$(wildcard core/nodes/*.cpp) \
-	$(wildcard scenes/*.cpp)
+	$(wildcard scenes/*.cpp) \
+	$(wildcard tools/*.cpp)
 
 #objects
 OBJDIR=obj
@@ -30,7 +31,7 @@ OUTDIR=../out
 OUT=$(addprefix $(OUTDIR)/,out)
 
 #targets
-all: $(OBJ) $(OUT)
+all: $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(OUT) $(OBJ) $(LIBS)
 
 %.o: %.cpp
