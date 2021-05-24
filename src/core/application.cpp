@@ -16,6 +16,11 @@ void Application::Init(int argc, char* argv[]) {
 	const int screenWidth = 800;
 	const int screenHeight = 600;
 
+	//initialize SDL
+	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
+		error("Failed to initialize SDL");
+	}
+
 	//create and check the window
 	window = SDL_CreateWindow(
 		"Example Caption",
@@ -41,8 +46,14 @@ void Application::Init(int argc, char* argv[]) {
 	//set the hook for the renderer
 	BaseScene::SetRenderer(renderer);
 
-	//setup the game controllers
-	SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
+	//Initialize SDL_mixer
+	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != 0) {
+		error("Failed to open audio");
+	}
+
+	if (Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG) {
+		error("Failed to initialize OGG format");
+	}
 }
 
 void Application::Proc() {
@@ -124,13 +135,16 @@ void Application::Quit() {
 	for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
 		delete *it;
 	}
+
+	Mix_Quit();
+	Mix_CloseAudio();
 	for (auto it : gameControllers) {
 		SDL_GameControllerClose(it.second);
 	}
-	SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 	BaseScene::SetRenderer(nullptr);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	SDL_Quit();
 }
 
 //Scene management

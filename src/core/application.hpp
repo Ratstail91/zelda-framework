@@ -4,6 +4,7 @@
 #include "scene_signal.hpp"
 
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_mixer.h"
 
 #include <list>
 #include <map>

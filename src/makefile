@@ -10,7 +10,7 @@ endif
 ifeq ($(shell uname), Linux)
 	LIBS+=-static-libstdc++
 endif
-LIBS+=-lSDL2 -lSDL2_image
+LIBS+=-lSDL2 -lSDL2_image -lSDL2_mixer
 
 #flags
 CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES))

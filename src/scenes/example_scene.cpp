@@ -1,5 +1,14 @@
 #include "example_scene.hpp"
 
+#include <sstream>
+#include <stdexcept>
+
+static void error(std::string str) {
+	std::ostringstream msg;
+	msg << str << ": " << SDL_GetError();
+	throw(std::runtime_error(msg.str()));
+}
+
 ExampleScene::ExampleScene() {
 	//fill the tree
 	root.AddChild(new NodeBase());
@@ -23,6 +32,14 @@ ExampleScene::ExampleScene() {
 	for (NodeColliderBox* box : colliderBoxes) {
 		box->SetBoundsToImageSibling();
 	}
+
+	music = Mix_LoadWAV("rsc/EngineTest.ogg");
+
+	if (music == nullptr) {
+		error("failed to load music file");
+	}
+
+	Mix_PlayChannel(-1, music, 0);
 }
 
 static void deleteNode(NodeBase* root) {

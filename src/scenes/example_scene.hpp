@@ -10,6 +10,8 @@
 
 #include "camera_editor.hpp"
 
+#include "SDL2/SDL_mixer.h"
+
 class ExampleScene : public BaseScene {
 public:
 	DECLARE_HIDING;
@@ -41,4 +43,5 @@ private:
 	//members
 	NodeBase root;
 	CameraEditor camera;
+	Mix_Chunk* music;
 };
