@@ -26,6 +26,8 @@ protected:
 	std::list<NodeBase*> children;
 };
 
+void deleteNode(NodeBase*);
+
 //template definitions
 template<typename T>
 std::list<T*> NodeBase::GetChildrenByType() {

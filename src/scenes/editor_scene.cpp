@@ -4,21 +4,6 @@ EditorScene::EditorScene() {
 	//
 }
 
-static void deleteNode(NodeBase* root) {
-	while (true) {
-		NodeBase* child = root->GetChild(0);
-
-		if (child == nullptr) {
-			break;
-		}
-
-		deleteNode(child);
-
-		root->RemoveChild(0);
-		delete child;
-	}
-}
-
 EditorScene::~EditorScene() {
 	deleteNode(&root);
 }
