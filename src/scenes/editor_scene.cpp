@@ -24,40 +24,40 @@ EditorScene::~EditorScene() {
 }
 
 //frame phases
-void EditorScene::FrameStart() {
+void EditorScene::OnFrameStart() {
 	//
 }
 
-void EditorScene::Update() {
+void EditorScene::OnUpdate() {
 	//
 }
 
-void EditorScene::FrameEnd() {
+void EditorScene::OnFrameEnd() {
 	//
 }
 
-void EditorScene::RenderFrame(SDL_Renderer* renderer) {
+void EditorScene::OnRenderFrame(SDL_Renderer* renderer) {
 	//
 }
 
 //input events
-void EditorScene::MouseMotion(SDL_MouseMotionEvent const& event) {
+void EditorScene::OnMouseMotion(SDL_MouseMotionEvent const& event) {
 	camera.MouseMotion(event);
 }
 
-void EditorScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
+void EditorScene::OnMouseButtonDown(SDL_MouseButtonEvent const& event) {
 	camera.MouseButtonDown(event);
 }
 
-void EditorScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
+void EditorScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 	camera.MouseButtonUp(event);
 }
 
-void EditorScene::MouseWheel(SDL_MouseWheelEvent const& event) {
+void EditorScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
 	camera.MouseWheel(event, GetRenderer());
 }
 
-void EditorScene::KeyDown(SDL_KeyboardEvent const& event) {
+void EditorScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 	//preference as a default
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE:
@@ -66,18 +66,18 @@ void EditorScene::KeyDown(SDL_KeyboardEvent const& event) {
 	}
 }
 
-void EditorScene::KeyUp(SDL_KeyboardEvent const& event) {
+void EditorScene::OnKeyUp(SDL_KeyboardEvent const& event) {
 	//
 }
 
-void EditorScene::ControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
+void EditorScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
 	//
 }
 
-void EditorScene::ControllerButtonDown(SDL_ControllerButtonEvent const& event) {
+void EditorScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	//
 }
 
-void EditorScene::ControllerButtonUp(SDL_ControllerButtonEvent const& event) {
+void EditorScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 	//
 }

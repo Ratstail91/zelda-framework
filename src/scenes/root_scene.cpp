@@ -24,40 +24,40 @@ RootScene::~RootScene() {
 }
 
 //frame phases
-void RootScene::FrameStart() {
+void RootScene::OnFrameStart() {
 	//
 }
 
-void RootScene::Update() {
+void RootScene::OnUpdate() {
 	//
 }
 
-void RootScene::FrameEnd() {
+void RootScene::OnFrameEnd() {
 	//
 }
 
-void RootScene::RenderFrame(SDL_Renderer* renderer) {
+void RootScene::OnRenderFrame(SDL_Renderer* renderer) {
 	//
 }
 
 //input events
-void RootScene::MouseMotion(SDL_MouseMotionEvent const& event) {
+void RootScene::OnMouseMotion(SDL_MouseMotionEvent const& event) {
 	//
 }
 
-void RootScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
+void RootScene::OnMouseButtonDown(SDL_MouseButtonEvent const& event) {
 	//
 }
 
-void RootScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
+void RootScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 	//
 }
 
-void RootScene::MouseWheel(SDL_MouseWheelEvent const& event) {
+void RootScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
 	//
 }
 
-void RootScene::KeyDown(SDL_KeyboardEvent const& event) {
+void RootScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 	//preference as a default
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE:
@@ -74,18 +74,18 @@ void RootScene::KeyDown(SDL_KeyboardEvent const& event) {
 	}
 }
 
-void RootScene::KeyUp(SDL_KeyboardEvent const& event) {
+void RootScene::OnKeyUp(SDL_KeyboardEvent const& event) {
 	//
 }
 
-void RootScene::ControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
+void RootScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
 	//
 }
 
-void RootScene::ControllerButtonDown(SDL_ControllerButtonEvent const& event) {
+void RootScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	//
 }
 
-void RootScene::ControllerButtonUp(SDL_ControllerButtonEvent const& event) {
+void RootScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 	//
 }

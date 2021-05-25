@@ -10,7 +10,7 @@ BaseScene::~BaseScene() {
 	//EMPTY
 }
 
-void BaseScene::RenderFrame(SDL_Renderer* renderer) {
+void BaseScene::OnRenderFrame(SDL_Renderer* renderer) {
 	//EMPTY
 }
 
@@ -30,19 +30,27 @@ SceneSignal BaseScene::GetSceneSignal() {
 	return sceneSignal;
 }
 
+void BaseScene::OnEnter() {
+	//EMPTY
+}
+
+void BaseScene::OnExit() {
+	//EMPTY
+}
+
 //-------------------------
 //frame phases
 //-------------------------
 
-void BaseScene::FrameStart() {
+void BaseScene::OnFrameStart() {
 	//EMPTY
 }
 
-void BaseScene::Update() {
+void BaseScene::OnUpdate() {
 	//EMPTY
 }
 
-void BaseScene::FrameEnd() {
+void BaseScene::OnFrameEnd() {
 	//EMPTY
 }
 
@@ -50,47 +58,47 @@ void BaseScene::FrameEnd() {
 //input events
 //-------------------------
 
-void BaseScene::QuitEvent() {
+void BaseScene::OnQuitEvent() {
 	sceneSignal = SceneSignal::QUIT;
 }
 
-void BaseScene::MouseMotion(SDL_MouseMotionEvent const& event) {
+void BaseScene::OnMouseMotion(SDL_MouseMotionEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
+void BaseScene::OnMouseButtonDown(SDL_MouseButtonEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
+void BaseScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::MouseWheel(SDL_MouseWheelEvent const& event) {
+void BaseScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::KeyDown(SDL_KeyboardEvent const& event) {
+void BaseScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 	//preference as a default
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE:
-			QuitEvent();
+			OnQuitEvent();
 		break;
 	}
 }
 
-void BaseScene::KeyUp(SDL_KeyboardEvent const& event) {
+void BaseScene::OnKeyUp(SDL_KeyboardEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::ControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
+void BaseScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::ControllerButtonDown(SDL_ControllerButtonEvent const& event) {
+void BaseScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	//EMPTY
 }
 
-void BaseScene::ControllerButtonUp(SDL_ControllerButtonEvent const& event) {
+void BaseScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 	//EMPTY
 }

@@ -32,9 +32,6 @@ ExampleScene::ExampleScene() {
 	for (NodeColliderBox* box : colliderBoxes) {
 		box->SetBoundsToImageSibling();
 	}
-
-	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
-	AudioMixer::GetSingleton().FadeMusicIn(2000);
 }
 
 static void deleteNode(NodeBase* root) {
@@ -56,12 +53,24 @@ ExampleScene::~ExampleScene() {
 	deleteNode(&root);
 }
 
+//control hooks
+void ExampleScene::OnEnter() {
+	//AudioMixer::GetSingleton().LoadChunk("music", "rsc/EngineTest.ogg");
+	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
+	AudioMixer::GetSingleton().PlayMusic();
+}
+
+void ExampleScene::OnExit() {
+	//AudioMixer::GetSingleton().UnloadChunk("music");
+	AudioMixer::GetSingleton().UnloadMusic();
+}
+
 //frame phases
-void ExampleScene::FrameStart() {
+void ExampleScene::OnFrameStart() {
 	//
 }
 
-void ExampleScene::Update() {
+void ExampleScene::OnUpdate() {
 	Vector2 gravity = {0, 0.1};
 	double friction = 0.01;
 
@@ -72,11 +81,11 @@ void ExampleScene::Update() {
 	}
 }
 
-void ExampleScene::FrameEnd() {
+void ExampleScene::OnFrameEnd() {
 	root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *(root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()) );
 }
 
-void ExampleScene::RenderFrame(SDL_Renderer* renderer) {
+void ExampleScene::OnRenderFrame(SDL_Renderer* renderer) {
 	auto images = root.GetChildrenByType<NodeImage>();
 
 	for (auto it = images.begin(); it != images.end(); it++) {
@@ -85,23 +94,30 @@ void ExampleScene::RenderFrame(SDL_Renderer* renderer) {
 }
 
 //input events
-void ExampleScene::MouseMotion(SDL_MouseMotionEvent const& event) {
+void ExampleScene::OnMouseMotion(SDL_MouseMotionEvent const& event) {
 	camera.MouseMotion(event);
 }
 
-void ExampleScene::MouseButtonDown(SDL_MouseButtonEvent const& event) {
+void ExampleScene::OnMouseButtonDown(SDL_MouseButtonEvent const& event) {
 	camera.MouseButtonDown(event);
 }
 
-void ExampleScene::MouseButtonUp(SDL_MouseButtonEvent const& event) {
+void ExampleScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 	camera.MouseButtonUp(event);
 }
 
-void ExampleScene::MouseWheel(SDL_MouseWheelEvent const& event) {
+void ExampleScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
 	camera.MouseWheel(event, GetRenderer());
+
+	//guard
+	if (!AudioMixer::GetSingleton().GetChunkLoaded("music")) {
+		return;
+	}
+
+	AudioMixer::GetSingleton().SetChannelVolume(musicChannel, std::min(camera.GetScale()->x * 16, 128.0));
 }
 
-void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {
+void ExampleScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 	//preference as a default
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE:
@@ -122,23 +138,39 @@ void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {
 			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = 1;
 		break;
 
-		case SDLK_m:
-			AudioMixer::GetSingleton().FadeMusicTo("rsc/EngineTest.ogg", 2000, 2000);
+		case SDLK_m: {
+			//guard
+			if (!AudioMixer::GetSingleton().GetChunkLoaded("music")) {
+				break;
+			}
+
+			if (AudioMixer::GetSingleton().GetChannelPlaying(musicChannel)) {
+				//toggle
+				if (AudioMixer::GetSingleton().GetChannelPaused(musicChannel)) {
+					AudioMixer::GetSingleton().UnpauseChannel(musicChannel);
+				} else {
+					AudioMixer::GetSingleton().PauseChannel(musicChannel);
+				}
+			} else {
+				musicChannel = AudioMixer::GetSingleton().PlayChunk("music");
+			}
+		}
+		break;
 	}
 }
 
-void ExampleScene::KeyUp(SDL_KeyboardEvent const& event) {
+void ExampleScene::OnKeyUp(SDL_KeyboardEvent const& event) {
 	//
 }
 
-void ExampleScene::ControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
+void ExampleScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) {
 	//
 }
 
-void ExampleScene::ControllerButtonDown(SDL_ControllerButtonEvent const& event) {
+void ExampleScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	//
 }
 
-void ExampleScene::ControllerButtonUp(SDL_ControllerButtonEvent const& event) {
+void ExampleScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 	//
 }

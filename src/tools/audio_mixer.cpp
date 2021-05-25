@@ -32,7 +32,7 @@ void AudioMixer::Quit() {
 }
 
 void AudioMixer::LoadMusic(std::string fname) {
-	FreeMusic();
+	UnloadMusic();
 
 	music = Mix_LoadMUS(fname.c_str());
 
@@ -41,7 +41,7 @@ void AudioMixer::LoadMusic(std::string fname) {
 	}
 }
 
-void AudioMixer::FreeMusic() {
+void AudioMixer::UnloadMusic() {
 	Mix_FreeMusic(music);
 	music = nullptr;
 }
@@ -64,17 +64,25 @@ void AudioMixer::UnpauseMusic() {
 	Mix_ResumeMusic();
 }
 
-bool AudioMixer::LoadedMusic() {
+bool AudioMixer::GetMusicLoaded() {
 	return music != nullptr;
 }
 
-bool AudioMixer::PlayingMusic() {
+bool AudioMixer::GetMusicPlaying() {
 	return Mix_PlayingMusic();
 }
 
-bool AudioMixer::PausedMusic() {
+bool AudioMixer::GetMusicPaused() {
 	//is playing but paused
 	return Mix_PlayingMusic() && Mix_PausedMusic();
+}
+
+void AudioMixer::SetMusicVolume(Uint8 volume) {
+	Mix_VolumeMusic(volume);
+}
+
+int AudioMixer::GetMusicVolume() {
+	return Mix_VolumeMusic(-1);
 }
 
 void AudioMixer::FadeMusicIn(int ms) {
@@ -89,7 +97,7 @@ void AudioMixer::FadeMusicOut(int ms) {
 
 //friend function
 void fadeMiddle() {
-	AudioMixer::GetSingleton().FreeMusic();
+	AudioMixer::GetSingleton().UnloadMusic();
 	Mix_HookMusicFinished(nullptr);
 
 	AudioMixer::GetSingleton().music = AudioMixer::GetSingleton().second;
@@ -110,4 +118,86 @@ void AudioMixer::FadeMusicTo(std::string fname, int outMs, int inMs) {
 
 	//for use in fadeMiddle()
 	inMilliseconds = inMs;
+}
+
+void AudioMixer::LoadChunk(std::string key, std::string fname) {
+	if (chunks.find(key) != chunks.end()) {
+		return; //already loaded
+	}
+
+	Mix_Chunk* chunk = Mix_LoadWAV(fname.c_str());
+
+	if (chunk == nullptr) {
+		error(std::string() + "Failed to load a chunk file " + fname);
+	}
+
+	chunks[key] = chunk;
+}
+
+void AudioMixer::UnloadChunk(std::string key) {
+	auto it = chunks.find(key);
+
+	if (it == chunks.end()) {
+		return; //already unloaded
+	}
+
+	Mix_FreeChunk(it->second);
+
+	chunks.erase(it);
+}
+
+int AudioMixer::PlayChunk(std::string key, int channel) {
+	auto it = chunks.find(key);
+
+	if (it == chunks.end()) {
+		error(std::string() + "Chunk not loaded: " + key);
+	}
+
+	int result = Mix_PlayChannel(channel, it->second, 0);
+
+	if (result == -1) {
+		error(std::string() + "Could not play chunk " + key);
+	}
+
+	return result;
+}
+
+void AudioMixer::StopChannel(int i) {
+	Mix_HaltChannel(i);
+}
+
+void AudioMixer::PauseChannel(int i) {
+	Mix_Pause(i);
+}
+
+void AudioMixer::UnpauseChannel(int i) {
+	Mix_Resume(i);
+}
+
+bool AudioMixer::GetChunkLoaded(std::string key) {
+	return chunks.find(key) != chunks.end();
+}
+
+bool AudioMixer::GetChannelPlaying(int i) {
+	return Mix_Playing(i);
+}
+
+bool AudioMixer::GetChannelPaused(int i) {
+	return Mix_Playing(i) && Mix_Paused(i);
+}
+
+void AudioMixer::SetChannelVolume(int i, Uint8 volume) {
+	Mix_Volume(i, volume);
+}
+
+int AudioMixer::GetChannelVolume(int i) {
+	return Mix_Volume(i, -1);
+}
+
+void AudioMixer::UnloadAllChunks() {
+	for (auto it : chunks) {
+		Mix_FreeChunk(it.second);
+	}
+
+	chunks.clear();
 }

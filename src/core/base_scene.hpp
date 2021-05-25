@@ -18,11 +18,15 @@ public:
 	BaseScene();
 	virtual ~BaseScene();
 
-	virtual void RenderFrame(SDL_Renderer*);
+	virtual void OnRenderFrame(SDL_Renderer*);
 	static void SetRenderer(SDL_Renderer*);
 
 	void SetSceneSignal(SceneSignal);
 	SceneSignal GetSceneSignal();
+
+	//control hooks
+	virtual void OnEnter();
+	virtual void OnExit();
 
 	//hiding & blocking signals
 	virtual bool GetHiding() const { return false; }
@@ -30,22 +34,22 @@ public:
 	virtual bool GetFreezing() const { return false; }
 
 	//frame phases
-	virtual void FrameStart();
-	virtual void Update();
-	virtual void FrameEnd();
+	virtual void OnFrameStart();
+	virtual void OnUpdate();
+	virtual void OnFrameEnd();
 
 	//input events
-	virtual void QuitEvent();
-	virtual void MouseMotion(SDL_MouseMotionEvent const& event);
-	virtual void MouseButtonDown(SDL_MouseButtonEvent const& event);
-	virtual void MouseButtonUp(SDL_MouseButtonEvent const& event);
-	virtual void MouseWheel(SDL_MouseWheelEvent const& event);
-	virtual void KeyDown(SDL_KeyboardEvent const& event);
-	virtual void KeyUp(SDL_KeyboardEvent const& event);
+	virtual void OnQuitEvent();
+	virtual void OnMouseMotion(SDL_MouseMotionEvent const& event);
+	virtual void OnMouseButtonDown(SDL_MouseButtonEvent const& event);
+	virtual void OnMouseButtonUp(SDL_MouseButtonEvent const& event);
+	virtual void OnMouseWheel(SDL_MouseWheelEvent const& event);
+	virtual void OnKeyDown(SDL_KeyboardEvent const& event);
+	virtual void OnKeyUp(SDL_KeyboardEvent const& event);
 	//TODO: joystick events
-	virtual void ControllerAxisMotion(SDL_ControllerAxisEvent const& event);
-	virtual void ControllerButtonDown(SDL_ControllerButtonEvent const& event);
-	virtual void ControllerButtonUp(SDL_ControllerButtonEvent const& event);
+	virtual void OnControllerAxisMotion(SDL_ControllerAxisEvent const& event);
+	virtual void OnControllerButtonDown(SDL_ControllerButtonEvent const& event);
+	virtual void OnControllerButtonUp(SDL_ControllerButtonEvent const& event);
 
 protected:
 	//control

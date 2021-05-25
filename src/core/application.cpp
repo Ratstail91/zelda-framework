@@ -55,6 +55,7 @@ void Application::Init(int argc, char* argv[]) {
 void Application::Proc() {
 	//load the first scene
 	ProcessSceneSignal(SceneSignal::FIRST);
+	sceneList.front()->OnEnter();
 
 	//fixed frame rate
 	typedef std::chrono::steady_clock Clock;
@@ -67,7 +68,13 @@ void Application::Proc() {
 	while(sceneList.size() > 0 && sceneList.front()->GetSceneSignal() != SceneSignal::QUIT) {
 		//switch scenes if necessary
 		if(sceneList.front()->GetSceneSignal() != SceneSignal::CONTINUE) {
+			sceneList.front()->OnExit();
+
 			ProcessSceneSignal(sceneList.front()->GetSceneSignal());
+
+			if (sceneList.size() > 0) {
+				sceneList.front()->OnEnter();
+			}
 			continue;
 		}
 
@@ -79,7 +86,7 @@ void Application::Proc() {
 			while(simTime < realTime) {
 				//call the user defined functions
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->FrameStart();
+					(*it)->OnFrameStart();
 					if ((*it)->GetFreezing()) {
 						break;
 					}
@@ -88,14 +95,14 @@ void Application::Proc() {
 				ProcessEvents();
 
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->Update();
+					(*it)->OnUpdate();
 					if ((*it)->GetFreezing()) {
 						break;
 					}
 				}
 
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->FrameEnd();
+					(*it)->OnFrameEnd();
 					if ((*it)->GetFreezing()) {
 						break;
 					}
@@ -119,7 +126,7 @@ void Application::Proc() {
 			it++; //search up the first hiding member
 		}
 		do {
-			(*it)->RenderFrame(renderer);
+			(*it)->OnRenderFrame(renderer);
 			it--;
 		} while(std::next(it, 1) != sceneList.begin()); //while still pointing to the list
 		SDL_RenderPresent(renderer);
@@ -151,14 +158,14 @@ void Application::ProcessEvents() {
 			//default
 			case SDL_QUIT:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->QuitEvent();
+					(*it)->OnQuitEvent();
 				}
 			break;
 
 			//mouse events
 			case SDL_MOUSEMOTION:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->MouseMotion(event.motion);
+					(*it)->OnMouseMotion(event.motion);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -167,7 +174,7 @@ void Application::ProcessEvents() {
 
 			case SDL_MOUSEBUTTONDOWN:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->MouseButtonDown(event.button);
+					(*it)->OnMouseButtonDown(event.button);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -176,7 +183,7 @@ void Application::ProcessEvents() {
 
 			case SDL_MOUSEBUTTONUP:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->MouseButtonUp(event.button);
+					(*it)->OnMouseButtonUp(event.button);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -185,7 +192,7 @@ void Application::ProcessEvents() {
 
 			case SDL_MOUSEWHEEL:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->MouseWheel(event.wheel);
+					(*it)->OnMouseWheel(event.wheel);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -195,7 +202,7 @@ void Application::ProcessEvents() {
 			//keyboard events
 			case SDL_KEYDOWN:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->KeyDown(event.key);
+					(*it)->OnKeyDown(event.key);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -204,7 +211,7 @@ void Application::ProcessEvents() {
 
 			case SDL_KEYUP:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->KeyUp(event.key);
+					(*it)->OnKeyUp(event.key);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -216,7 +223,7 @@ void Application::ProcessEvents() {
 			//controller events
 			case SDL_CONTROLLERAXISMOTION:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->ControllerAxisMotion(event.caxis);
+					(*it)->OnControllerAxisMotion(event.caxis);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -225,7 +232,7 @@ void Application::ProcessEvents() {
 
 			case SDL_CONTROLLERBUTTONDOWN:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->ControllerButtonDown(event.cbutton);
+					(*it)->OnControllerButtonDown(event.cbutton);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
@@ -234,7 +241,7 @@ void Application::ProcessEvents() {
 
 			case SDL_CONTROLLERBUTTONUP:
 				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->ControllerButtonUp(event.cbutton);
+					(*it)->OnControllerButtonUp(event.cbutton);
 					if ((*it)->GetBlocking()) {
 						break;
 					}
