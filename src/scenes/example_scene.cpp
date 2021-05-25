@@ -33,13 +33,8 @@ ExampleScene::ExampleScene() {
 		box->SetBoundsToImageSibling();
 	}
 
-	music = Mix_LoadWAV("rsc/EngineTest.ogg");
-
-	if (music == nullptr) {
-		error("failed to load music file");
-	}
-
-	Mix_PlayChannel(-1, music, 0);
+	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
+	AudioMixer::GetSingleton().FadeMusicIn(2000);
 }
 
 static void deleteNode(NodeBase* root) {
@@ -126,6 +121,9 @@ void ExampleScene::KeyDown(SDL_KeyboardEvent const& event) {
 		case SDLK_d:
 			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = 1;
 		break;
+
+		case SDLK_m:
+			AudioMixer::GetSingleton().FadeMusicTo("rsc/EngineTest.ogg", 2000, 2000);
 	}
 }
 

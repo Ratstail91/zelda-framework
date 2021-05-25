@@ -1,5 +1,7 @@
 #include "application.hpp"
 
+#include "audio_mixer.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <sstream>
@@ -46,14 +48,8 @@ void Application::Init(int argc, char* argv[]) {
 	//set the hook for the renderer
 	BaseScene::SetRenderer(renderer);
 
-	//Initialize SDL_mixer
-	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != 0) {
-		error("Failed to open audio");
-	}
-
-	if (Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG) {
-		error("Failed to initialize OGG format");
-	}
+	//init audio
+	AudioMixer::GetSingleton().Init();
 }
 
 void Application::Proc() {
@@ -135,9 +131,9 @@ void Application::Quit() {
 	for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
 		delete *it;
 	}
+	sceneList.clear();
 
-	Mix_Quit();
-	Mix_CloseAudio();
+	AudioMixer::GetSingleton().Quit();
 	for (auto it : gameControllers) {
 		SDL_GameControllerClose(it.second);
 	}

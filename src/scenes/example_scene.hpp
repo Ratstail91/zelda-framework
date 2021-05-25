@@ -8,9 +8,8 @@
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
 
+#include "audio_mixer.hpp"
 #include "camera_editor.hpp"
-
-#include "SDL2/SDL_mixer.h"
 
 class ExampleScene : public BaseScene {
 public:
@@ -43,5 +42,4 @@ private:
 	//members
 	NodeBase root;
 	CameraEditor camera;
-	Mix_Chunk* music;
 };
