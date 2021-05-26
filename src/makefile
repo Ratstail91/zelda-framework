@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=. core core/nodes scenes tools
+INCLUDES+=. core core/nodes scenes tools vendor/imgui vendor/imgui/backends vendor/imgui-sdl
 
 #libraries
 #the order of the $(LIBS) is important, at least for MinGW
@@ -13,14 +13,17 @@ endif
 LIBS+=-lSDL2 -lSDL2_image -lSDL2_mixer
 
 #flags
-CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES))
+CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES)) -Wno-psabi
 
 #source
 CXXSRC=$(wildcard *.cpp) \
 	$(wildcard core/*.cpp) \
 	$(wildcard core/nodes/*.cpp) \
 	$(wildcard scenes/*.cpp) \
-	$(wildcard tools/*.cpp)
+	$(wildcard tools/*.cpp) \
+	$(wildcard vendor/imgui/*.cpp) \
+	$(wildcard vendor/imgui/backends/imgui_impl_sdl.cpp) \
+	$(wildcard vendor/imgui-sdl/imgui_sdl.cpp)
 
 #objects
 OBJDIR=obj

@@ -1,0 +1,6 @@
+[submodule "src/vendor/imgui"]
+	path = src/vendor/imgui
+	url = https://github.com/Ratstail91/imgui.git
+[submodule "src/vendor/imgui-sdl"]
+	path = src/vendor/imgui-sdl
+	url = https://github.com/Ratstail91/imgui_sdl.git

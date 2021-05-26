@@ -1,6 +1,8 @@
 #include "application.hpp"
 
 #include "audio_mixer.hpp"
+#include "imgui_impl_sdl.h"
+#include "imgui_sdl.h"
 
 #include <chrono>
 #include <iostream>
@@ -50,6 +52,26 @@ void Application::Init(int argc, char* argv[]) {
 
 	//init audio
 	AudioMixer::GetSingleton().Init();
+
+	//init dear imgui
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+
+	ImGuiIO& io = ImGui::GetIO();
+
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.DisplaySize.x = screenWidth;
+	io.DisplaySize.y = screenHeight;
+	io.IniFilename = nullptr;
+
+	io.Fonts->AddFontDefault();
+	io.Fonts->Build();
+
+	io.KeyMap[ImGuiKey_Space] = SDL_SCANCODE_SPACE; //still in beta, huh?
+
+	//SDL renderer
+	ImGui_ImplSDL2_InitForMetal(window);
+	ImGuiSDL::Initialize(renderer, screenWidth, screenHeight);
 }
 
 void Application::Proc() {
@@ -120,6 +142,9 @@ void Application::Proc() {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		ImGui_ImplSDL2_NewFrame(window);
+		ImGui::NewFrame();
+
 		//actually render (from the highest hiding member forward)
 		std::list<BaseScene*>::iterator it = sceneList.begin();
 		while(std::next(it, 1) != sceneList.end() && !(*it)->GetHiding()) {
@@ -129,6 +154,10 @@ void Application::Proc() {
 			(*it)->OnRenderFrame(renderer);
 			it--;
 		} while(std::next(it, 1) != sceneList.begin()); //while still pointing to the list
+		ImGui::EndFrame();
+
+		ImGui::Render();
+		ImGuiSDL::Render(ImGui::GetDrawData());
 		SDL_RenderPresent(renderer);
 	}
 }
@@ -139,6 +168,10 @@ void Application::Quit() {
 		delete *it;
 	}
 	sceneList.clear();
+
+	ImGuiSDL::Deinitialize();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 
 	AudioMixer::GetSingleton().Quit();
 	for (auto it : gameControllers) {
@@ -154,6 +187,9 @@ void Application::Quit() {
 void Application::ProcessEvents() {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
+		//ImGUI hook
+		ImGui_ImplSDL2_ProcessEvent(&event);
+
 		switch(event.type) {
 			//default
 			case SDL_QUIT:
