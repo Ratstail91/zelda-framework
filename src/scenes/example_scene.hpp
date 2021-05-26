@@ -7,6 +7,8 @@
 #include "node_actor.hpp"
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
+#include "node_audio_listener.hpp"
+#include "node_audio_source.hpp"
 
 #include "audio_mixer.hpp"
 #include "camera_editor.hpp"

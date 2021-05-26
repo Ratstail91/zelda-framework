@@ -9,7 +9,7 @@ public:
 	virtual ~NodeBase() = default;
 
 	//node tree
-	void AddChild(NodeBase*);
+	NodeBase* AddChild(NodeBase*);
 	NodeBase* GetChild(int index);
 	void RemoveChild(int index);
 

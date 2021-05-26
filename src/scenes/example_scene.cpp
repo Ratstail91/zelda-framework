@@ -10,6 +10,9 @@ static void error(std::string str) {
 }
 
 ExampleScene::ExampleScene() {
+	//wire up audio nodes
+	NodeAudioListener* listener = new NodeAudioListener();
+
 	//fill the tree
 	root.AddChild(new NodeBase());
 	root.AddChild(new NodeBase());
@@ -18,17 +21,20 @@ ExampleScene::ExampleScene() {
 	root.GetChild(0)->AddChild(new NodeTransform());
 	root.GetChild(0)->AddChild(new NodeImage(GetRenderer(), "rsc/thing.png"));
 	root.GetChild(0)->AddChild(new NodeColliderBox());
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000));
 
 	//dragon
 	root.GetChild(1)->AddChild(new NodeTransform());
 	root.GetChild(1)->AddChild(new NodeImage(GetRenderer(), "rsc/fairy dragon.png"));
 	root.GetChild(1)->AddChild(new NodeColliderBox());
 	root.GetChild(1)->AddChild(new NodeActor());
+	root.GetChild(1)->AddChild(listener);
 
+	//position the ground
 	((NodeTransform*)(root.GetChild(0)->GetChild(0)))->GetPosition()->y = 400;
 
+	//correct the positions of the colliders
 	std::list<NodeColliderBox*> colliderBoxes = root.GetChildrenByType<NodeColliderBox>();
-
 	for (NodeColliderBox* box : colliderBoxes) {
 		box->SetBoundsToImageSibling();
 	}
@@ -40,19 +46,27 @@ ExampleScene::~ExampleScene() {
 
 //control hooks
 void ExampleScene::OnEnter() {
-	//AudioMixer::GetSingleton().LoadChunk("music", "rsc/EngineTest.ogg");
-	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
-	AudioMixer::GetSingleton().PlayMusic();
+	AudioMixer::GetSingleton().LoadChunk("music", "rsc/EngineTest.ogg");
+//	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
+//	AudioMixer::GetSingleton().PlayMusic();
+
+	//debugging
+	root.GetChildrenByType<NodeAudioSource>().front()->PlayChunk("music");
 }
 
 void ExampleScene::OnExit() {
-	//AudioMixer::GetSingleton().UnloadChunk("music");
-	AudioMixer::GetSingleton().UnloadMusic();
+	AudioMixer::GetSingleton().UnloadChunk("music");
+//	AudioMixer::GetSingleton().UnloadMusic();
 }
 
 //frame phases
 void ExampleScene::OnFrameStart() {
-	//
+	//cache listener positions
+	std::list<NodeAudioListener*> listeners = root.GetChildrenByType<NodeAudioListener>();
+
+	for (auto ptr : listeners) {
+		ptr->GetWorldPosition();
+	}
 }
 
 void ExampleScene::OnUpdate() {
@@ -67,7 +81,15 @@ void ExampleScene::OnUpdate() {
 }
 
 void ExampleScene::OnFrameEnd() {
+	//snap the dragon
 	root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *(root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()) );
+
+	//re-calc source volumes
+	std::list<NodeAudioSource*> sources = root.GetChildrenByType<NodeAudioSource>();
+
+	for (auto ptr : sources) {
+		ptr->CalcVolume();
+	}
 }
 
 void ExampleScene::OnRenderFrame(SDL_Renderer* renderer) {

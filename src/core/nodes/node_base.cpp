@@ -1,8 +1,9 @@
 #include "node_base.hpp"
 
-void NodeBase::AddChild(NodeBase* ptr) {
+NodeBase* NodeBase::AddChild(NodeBase* ptr) {
 	children.push_back(ptr);
 	ptr->parent = this;
+	return ptr;
 }
 
 NodeBase* NodeBase::GetChild(int index) {
