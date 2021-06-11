@@ -142,10 +142,11 @@ void Application::Proc() {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		//start the frame
 		ImGui_ImplSDL2_NewFrame(window);
 		ImGui::NewFrame();
 
-		//actually render (from the highest hiding member forward)
+		//actually render the scenes (from the highest hiding member forward)
 		std::list<BaseScene*>::iterator it = sceneList.begin();
 		while(std::next(it, 1) != sceneList.end() && !(*it)->GetHiding()) {
 			it++; //search up the first hiding member
@@ -154,8 +155,9 @@ void Application::Proc() {
 			(*it)->OnRenderFrame(renderer);
 			it--;
 		} while(std::next(it, 1) != sceneList.begin()); //while still pointing to the list
-		ImGui::EndFrame();
 
+		//end the frame
+		ImGui::EndFrame();
 		ImGui::Render();
 		ImGuiSDL::Render(ImGui::GetDrawData());
 		SDL_RenderPresent(renderer);
@@ -165,6 +167,7 @@ void Application::Proc() {
 void Application::Quit() {
 	//clean up after the program
 	for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
+		(*it)->OnExit();
 		delete *it;
 	}
 	sceneList.clear();

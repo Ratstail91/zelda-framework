@@ -24,16 +24,8 @@ void EditorScene::OnFrameEnd() {
 }
 
 void EditorScene::OnRenderFrame(SDL_Renderer* renderer) {
-	char buf[128];
-	float f;
-
-	ImGui::Begin("title");
-	ImGui::Text("Hello, world %d", 123);
-	if (ImGui::Button("Save"))
-		;
-	ImGui::InputText("string", buf, IM_ARRAYSIZE(buf));
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-	ImGui::End();
+	bool open = false;
+	ImGui::ShowDemoWindow(&open);
 }
 
 //input events
