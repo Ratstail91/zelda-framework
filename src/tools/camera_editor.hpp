@@ -10,7 +10,7 @@ public:
 	void MouseMotion(SDL_MouseMotionEvent const& event);
 	void MouseButtonDown(SDL_MouseButtonEvent const& event);
 	void MouseButtonUp(SDL_MouseButtonEvent const& event);
-	void MouseWheel(SDL_MouseWheelEvent const& event, SDL_Renderer* const);
+	void MouseWheel(SDL_MouseWheelEvent const& event);
 
 private:
 	void ScaleBoundsCheck();

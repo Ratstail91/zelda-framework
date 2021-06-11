@@ -19,7 +19,7 @@ void CameraEditor::MouseButtonUp(SDL_MouseButtonEvent const& event) {
 	}
 }
 
-void CameraEditor::MouseWheel(SDL_MouseWheelEvent const& event, SDL_Renderer* const renderer) {
+void CameraEditor::MouseWheel(SDL_MouseWheelEvent const& event) {
 	//scroll around the mouse cursor
 	int x, y, w, h;
 	SDL_GetMouseState(&x, &y);

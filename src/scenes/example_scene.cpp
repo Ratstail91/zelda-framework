@@ -114,7 +114,7 @@ void ExampleScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 }
 
 void ExampleScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
-	camera.MouseWheel(event, GetRenderer());
+	camera.MouseWheel(event);
 
 	//guard
 	if (!AudioMixer::GetSingleton().GetChunkLoaded("music")) {

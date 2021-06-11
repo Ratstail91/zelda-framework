@@ -42,7 +42,7 @@ void EditorScene::OnMouseButtonUp(SDL_MouseButtonEvent const& event) {
 }
 
 void EditorScene::OnMouseWheel(SDL_MouseWheelEvent const& event) {
-	camera.MouseWheel(event, GetRenderer());
+	camera.MouseWheel(event);
 }
 
 void EditorScene::OnKeyDown(SDL_KeyboardEvent const& event) {
