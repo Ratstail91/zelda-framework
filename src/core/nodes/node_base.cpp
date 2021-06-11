@@ -1,6 +1,6 @@
 #include "node_base.hpp"
 
-NodeBase* NodeBase::AddChild(NodeBase* ptr) {
+NodeBase* NodeBase::AddChild(NodeBase* const ptr) {
 	children.push_back(ptr);
 	ptr->parent = this;
 	return ptr;
@@ -36,7 +36,7 @@ void NodeBase::RemoveChild(int index) {
 	}
 }
 
-void deleteNode(NodeBase* root) {
+void deleteNode(NodeBase* const root) {
 	while (true) {
 		NodeBase* child = root->GetChild(0);
 

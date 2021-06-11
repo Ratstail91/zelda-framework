@@ -58,7 +58,7 @@ public:
 	}
 
 	//arithmetic operators
-	ColliderBox operator+(Vector2 v) const {
+	ColliderBox operator+(Vector2 const& v) const {
 		//adjust position
 		ColliderBox box;
 		box.center = center + v;

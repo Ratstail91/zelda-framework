@@ -2,7 +2,7 @@
 
 #include "node_transform.hpp"
 
-void NodeActor::Update(Vector2 gravity, double friction) {
+void NodeActor::Update(Vector2 const& gravity, double const friction) {
 	NodeTransform* transform = parent->GetFirstChildByType<NodeTransform>();
 
 	if (transform != nullptr) {

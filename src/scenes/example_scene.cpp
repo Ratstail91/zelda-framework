@@ -1,14 +1,5 @@
 #include "example_scene.hpp"
 
-#include <sstream>
-#include <stdexcept>
-
-static void error(std::string str) {
-	std::ostringstream msg;
-	msg << str << ": " << SDL_GetError();
-	throw(std::runtime_error(msg.str()));
-}
-
 ExampleScene::ExampleScene() {
 	//wire up audio nodes
 	NodeAudioListener* listener = new NodeAudioListener();

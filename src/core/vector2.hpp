@@ -28,32 +28,32 @@ public:
 	}
 
 	//Arithmetic operators
-	Vector2 operator+(Vector2 v) const {
+	Vector2 operator+(Vector2 const& v) const {
 		Vector2 ret;
 		ret.x = x + v.x;
 		ret.y = y + v.y;
 		return ret;
 	}
-	Vector2 operator-(Vector2 v) const {
+	Vector2 operator-(Vector2 const& v) const {
 		Vector2 ret;
 		ret.x = x - v.x;
 		ret.y = y - v.y;
 		return ret;
 	}
-	Vector2 operator*(Vector2 v) const {
+	Vector2 operator*(Vector2 const& v) const {
 		Vector2 ret;
 		ret.x = x * v.x;
 		ret.y = y * v.y;
 		return ret;
 	}
-	Vector2 operator*(double d) const {
+	Vector2 operator*(double const& d) const {
 		Vector2 ret;
 		ret.x = x * d;
 		ret.y = y * d;
 		return ret;
 	}
 
-	Vector2 operator/(Vector2 v) {
+	Vector2 operator/(Vector2 const& v) {
 		if (!v.x || !v.y)
 			throw(std::domain_error("Divide by zero"));
 		Vector2 ret;
@@ -61,7 +61,7 @@ public:
 		ret.y = y / v.y;
 		return ret;
 	}
-	Vector2 operator/(double d) {
+	Vector2 operator/(double const& d) {
 		if (!d)
 			throw(std::domain_error("Divide by zero"));
 		Vector2 ret;
@@ -74,8 +74,8 @@ public:
 	Vector2 operator-() { return {-x, -y}; }
 
 	//comparison operators
-	bool operator==(Vector2 v) { return (x == v.x && y == v.y); }
-	bool operator!=(Vector2 v) { return (x != v.x || y != v.y); }
+	bool operator==(Vector2 const& v) { return (x == v.x && y == v.y); }
+	bool operator!=(Vector2 const& v) { return (x != v.x || y != v.y); }
 
 	//member templates (curry the above operators)
 	template<typename T> Vector2 operator+=(T t) { return *this = *this + t; }

@@ -7,7 +7,7 @@
 class NodeAudioListener : public NodeBase {
 public:
 	Vector2 GetWorldPosition();
-	Vector2 GetCachedPosition();
+	Vector2 GetCachedPosition() const;
 
 protected:
 	Vector2 cachedPosition = {0, 0}; //otherwise, the audio sources would run up the node tree every single time this was accessed

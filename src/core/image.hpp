@@ -9,7 +9,7 @@ public:
 	Image() = default;
 	Image(Image const& rhs) { *this = rhs; }
 	Image(Image&& rhs) { *this = std::move(rhs); }
-	Image(SDL_Renderer* r, std::string fname) { Load(r, fname); }
+	Image(SDL_Renderer* r, std::string const& fname) { Load(r, fname); }
 	Image(SDL_Renderer* r, Uint16 w, Uint16 h) { Create(r, w, h); }
 	Image(SDL_Texture* p) { SetTexture(p); }
 	virtual ~Image() { Free(); }
@@ -17,7 +17,7 @@ public:
 	Image& operator=(Image const&);
 	Image& operator=(Image&&);
 
-	SDL_Texture* Load(SDL_Renderer* const renderer, std::string fname);
+	SDL_Texture* Load(SDL_Renderer* const renderer, std::string const& fname);
 	SDL_Texture* Create(SDL_Renderer* const renderer, Uint16 w, Uint16 h, SDL_Color blank = {0, 0, 0, 255});
 	SDL_Texture* CopyTexture(SDL_Renderer* const renderer, SDL_Texture* const ptr);
 	SDL_Texture* SetTexture(SDL_Texture*);
@@ -30,7 +30,7 @@ public:
 	Uint8 GetAlpha();
 
 	//Clip handlers
-	SDL_Rect SetClip(SDL_Rect r) { return clip = r; }
+	SDL_Rect SetClip(SDL_Rect const& r) { return clip = r; }
 	SDL_Rect GetClip() const { return clip; }
 
 	Sint16 SetClipX(Sint16 x) { return clip.x = x; }

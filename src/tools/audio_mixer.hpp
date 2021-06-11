@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL_mixer.h>
 
-#include <map>
 #include <string>
+#include <map>
 
 class AudioMixer {
 public:
@@ -15,7 +15,7 @@ public:
 	void Quit();
 
 	//music controls
-	void LoadMusic(std::string);
+	void LoadMusic(const std::string&);
 	void UnloadMusic();
 	void PlayMusic();
 	void StopMusic();
@@ -31,17 +31,17 @@ public:
 
 	void FadeMusicIn(int ms);
 	void FadeMusicOut(int ms);
-	void FadeMusicTo(std::string, int outMs, int inMs);
+	void FadeMusicTo(const std::string&, int outMs, int inMs);
 
 	//chunk controls
-	void LoadChunk(std::string key, std::string fname);
-	void UnloadChunk(std::string key);
-	int PlayChunk(std::string key, int channel = -1);
+	void LoadChunk(const std::string& key, const std::string& fname);
+	void UnloadChunk(const std::string& key);
+	int PlayChunk(const std::string& key, int channel = -1);
 	void StopChannel(int i);
 	void PauseChannel(int i);
 	void UnpauseChannel(int i);
 
-	bool GetChunkLoaded(std::string key);
+	bool GetChunkLoaded(const std::string& key);
 	bool GetChannelPlaying(int i);
 	bool GetChannelPaused(int i);
 
@@ -55,7 +55,10 @@ private:
 	Mix_Music* second;
 	int inMilliseconds;
 
-	static AudioMixer singleton;
+	static AudioMixer* singleton;
+	AudioMixer() { }
+	~AudioMixer() { }
+
 	Mix_Music* music;
-	std::map<std::string, Mix_Chunk*> chunks;
+	std::map<const std::string, Mix_Chunk*> chunks;
 };

@@ -6,5 +6,5 @@
 
 class NodeActor : public NodeBase {
 public:
-	void Update(Vector2 gravity = {0.0, 0.0}, double friction = 0.0);
+	void Update(Vector2 const& gravity = {0.0, 0.0}, double const friction = 0.0);
 };

@@ -4,12 +4,12 @@
 #include "node_transform.hpp"
 #include "node_collider_box.hpp"
 
-NodeAudioSource::NodeAudioSource(NodeAudioListener* ptr, double dist) {
+NodeAudioSource::NodeAudioSource(NodeAudioListener const* const ptr, double dist) {
 	listener = ptr;
 	maxDistance = dist;
 }
 
-void NodeAudioSource::PlayChunk(std::string key) {
+void NodeAudioSource::PlayChunk(std::string const& key) {
 	channel = AudioMixer::GetSingleton().PlayChunk(key);
 	CalcVolume();
 }

@@ -9,7 +9,7 @@ public:
 	virtual ~NodeBase() = default;
 
 	//node tree
-	NodeBase* AddChild(NodeBase*);
+	NodeBase* AddChild(NodeBase* const);
 	NodeBase* GetChild(int index);
 	void RemoveChild(int index);
 
@@ -26,7 +26,7 @@ protected:
 	std::list<NodeBase*> children;
 };
 
-void deleteNode(NodeBase*);
+void deleteNode(NodeBase* const);
 
 //template definitions
 template<typename T>

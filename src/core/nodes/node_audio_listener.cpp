@@ -7,6 +7,6 @@ Vector2 NodeAudioListener::GetWorldPosition() {
 	return cachedPosition = parent->GetFirstChildByType<NodeTransform>()->GetWorldPosition() + parent->GetFirstChildByType<NodeColliderBox>()->center;
 }
 
-Vector2 NodeAudioListener::GetCachedPosition() {
+Vector2 NodeAudioListener::GetCachedPosition() const {
 	return cachedPosition;
 }

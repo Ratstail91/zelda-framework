@@ -8,7 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
-static void error(std::string str) {
+static void error(const std::string& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
 	throw(std::runtime_error(msg.str()));

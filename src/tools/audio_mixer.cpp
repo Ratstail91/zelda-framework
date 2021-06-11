@@ -3,16 +3,19 @@
 #include <sstream>
 #include <stdexcept>
 
-AudioMixer AudioMixer::singleton;
-
-static void error(std::string str) {
+static void error(const std::string& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
 	throw(std::runtime_error(msg.str()));
 }
 
+AudioMixer* AudioMixer::singleton = nullptr;
+
 AudioMixer& AudioMixer::GetSingleton() {
-	return singleton;
+	if (!singleton) {
+		singleton = new AudioMixer();
+	}
+	return *singleton;
 }
 
 void AudioMixer::Init() {
@@ -31,7 +34,7 @@ void AudioMixer::Quit() {
 	Mix_CloseAudio();
 }
 
-void AudioMixer::LoadMusic(std::string fname) {
+void AudioMixer::LoadMusic(const std::string& fname) {
 	UnloadMusic();
 
 	music = Mix_LoadMUS(fname.c_str());
@@ -104,7 +107,7 @@ void fadeMiddle() {
 	AudioMixer::GetSingleton().FadeMusicIn(AudioMixer::GetSingleton().inMilliseconds);
 }
 
-void AudioMixer::FadeMusicTo(std::string fname, int outMs, int inMs) {
+void AudioMixer::FadeMusicTo(const std::string& fname, int outMs, int inMs) {
 	//load second file
 	second = Mix_LoadMUS(fname.c_str());
 
@@ -120,7 +123,7 @@ void AudioMixer::FadeMusicTo(std::string fname, int outMs, int inMs) {
 	inMilliseconds = inMs;
 }
 
-void AudioMixer::LoadChunk(std::string key, std::string fname) {
+void AudioMixer::LoadChunk(const std::string& key, const std::string& fname) {
 	if (chunks.find(key) != chunks.end()) {
 		return; //already loaded
 	}
@@ -134,7 +137,7 @@ void AudioMixer::LoadChunk(std::string key, std::string fname) {
 	chunks[key] = chunk;
 }
 
-void AudioMixer::UnloadChunk(std::string key) {
+void AudioMixer::UnloadChunk(const std::string& key) {
 	auto it = chunks.find(key);
 
 	if (it == chunks.end()) {
@@ -146,7 +149,7 @@ void AudioMixer::UnloadChunk(std::string key) {
 	chunks.erase(it);
 }
 
-int AudioMixer::PlayChunk(std::string key, int channel) {
+int AudioMixer::PlayChunk(const std::string& key, int channel) {
 	auto it = chunks.find(key);
 
 	if (it == chunks.end()) {
@@ -174,7 +177,7 @@ void AudioMixer::UnpauseChannel(int i) {
 	Mix_Resume(i);
 }
 
-bool AudioMixer::GetChunkLoaded(std::string key) {
+bool AudioMixer::GetChunkLoaded(const std::string& key) {
 	return chunks.find(key) != chunks.end();
 }
 
