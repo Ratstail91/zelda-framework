@@ -2,6 +2,8 @@
 
 This is a hopefully-robust C++ game engine built on SDL2.
 
+*While in the root scene, press space to enter the example scene (you may need to wait for the music to load), or tab to enter the editor scene. Press escape to return to the root scene.*
+
 # Scene System
 
 The core of this engine consists of the scene system, which creates a "stack" of scenes placed one on top of another, on top of another. Scenes are rendered from back-to-front, and input is interpreted from front-to-back.
