@@ -19,11 +19,11 @@ The entities in the 2D game world must exist in the node system by inheriting fr
 Many node types have dependancies among their siblings, i.e. they don't work correctly unless another node of a specific type exists. These dependancies are:
 
 ```
-NodeImage:			NodeTransform
-NodeColliderBox:	NodeTransform, NodeImage
-NodeAudioSource:	NodeTransform, NodeColliderBox
-NodeListener:		NodeTransform, NodeColliderBox
-NodeActor:			NodeTransform
+NodeImage:       NodeTransform
+NodeColliderBox: NodeTransform, NodeImage
+NodeAudioSource: NodeTransform, NodeColliderBox (and NodeImage)
+NodeListener:    NodeTransform, NodeColliderBox (and NodeImage)
+NodeActor:       NodeTransform
 ```
 
 # Tools
