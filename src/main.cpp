@@ -8,13 +8,11 @@
 int main(int argc, char* argv[]) {
 	std::cout << "Beginning " << argv[0] << std::endl;
 	try {
-		Application* app = new Application();
+		Application app;
 
-		app->Init(argc, argv);
-		app->Proc();
-		app->Quit();
-
-		delete app;
+		app.Init(argc, argv);
+		app.Proc();
+		app.Quit();
 	}
 	catch(std::exception& e) {
 		std::cerr << "Fatal Error: " << e.what() << std::endl;

@@ -2,6 +2,22 @@
 
 This is a hopefully-robust C++ game engine built on SDL2.
 
+TODO: Document the API
+
+# Building Instructions
+
+* Clone the repo and it's submodules
+* Run `make` in the root directory
+* Run `out\out` in the root directory to execute the program
+
+This project has the following dependencies.
+
+* [SDL2](https://www.libsdl.org/download-2.0.php)
+* [SDL2_image](https://www.libsdl.org/projects/SDL_image/)
+* [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)
+
+This project includes several external repositories as git submodules under `src/vendor`, and will not build without them.
+
 *While in the root scene, press space to enter the example scene (you may need to wait for the music to load), or tab to enter the editor scene. Press escape to return to the root scene.*
 
 # Scene System
@@ -26,9 +42,8 @@ NodeListener:    NodeTransform, NodeColliderBox (and NodeImage)
 NodeActor:       NodeTransform
 ```
 
-# Tools
+# Other Tools
 
 `AudioMixer` is built on SDL2_mixer, and supports two types of sound: music and chunks. Music is designed for streaming audio directly from the file; the tool can only support one music file at a time. Chunks are separate pieces of sound effects which need to be loaded into memory in their entirety before use. `NodeAudioListener` and `NodeAudioSource` both utilize this tool.
 
 `CameraBase` can be used for cameras, such as `CameraEditor`, and also supports updates in the same fashon as `NodeTransform`.
-
