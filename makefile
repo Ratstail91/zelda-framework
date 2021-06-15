@@ -16,6 +16,11 @@ all: $(OUTDIR) binary
 debug: export CXXFLAGS+=-g
 debug: clean all
 
+release: export CXXFLAGS+=-O2
+release: clean all
+
+rebuild: clean all
+
 #For use on my machine ONLY
 binary: $(OUTDIR)
 ifeq ($(OS),Windows_NT)
@@ -32,8 +37,6 @@ ifeq ($(OS),Windows_NT)
 else ifeq ($(shell uname), Linux)
 	find . -type f -name '*.o' -exec rm -f -r -v {} \;
 	find . -type f -name '*.a' -exec rm -f -r -v {} \;
-#	rm $(OUTDIR)/* -f
+	rm $(OUTDIR)/* -f -r -v
 	find . -empty -type d -delete
 endif
-
-rebuild: clean all

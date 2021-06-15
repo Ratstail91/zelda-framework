@@ -60,8 +60,6 @@ void Application::Init(int argc, char* argv[]) {
 	ImGuiIO& io = ImGui::GetIO();
 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.DisplaySize.x = screenWidth;
-	io.DisplaySize.y = screenHeight;
 	io.IniFilename = nullptr;
 
 	io.Fonts->AddFontDefault();
@@ -107,25 +105,25 @@ void Application::Proc() {
 		if (simTime < realTime) {
 			while(simTime < realTime) {
 				//call the user defined functions
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnFrameStart();
-					if ((*it)->GetFreezing()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnFrameStart();
+					if (scenePtr->GetFreezing()) {
 						break;
 					}
 				}
 
 				ProcessEvents();
 
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnUpdate();
-					if ((*it)->GetFreezing()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnUpdate();
+					if (scenePtr->GetFreezing()) {
 						break;
 					}
 				}
 
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnFrameEnd();
-					if ((*it)->GetFreezing()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnFrameEnd();
+					if (scenePtr->GetFreezing()) {
 						break;
 					}
 				}
@@ -147,14 +145,14 @@ void Application::Proc() {
 		ImGui::NewFrame();
 
 		//actually render the scenes (from the highest hiding member forward)
-		std::list<BaseScene*>::iterator it = sceneList.begin();
+		auto it = sceneList.begin();
 		while(std::next(it, 1) != sceneList.end() && !(*it)->GetHiding()) {
-			it++; //search up the first hiding member
+			it++; //search up the top-most hiding member
 		}
+
 		do {
 			(*it)->OnRenderFrame(renderer);
-			it--;
-		} while(std::next(it, 1) != sceneList.begin()); //while still pointing to the list
+		} while(std::next(--it, 1) != sceneList.begin()); //while still pointing to the list
 
 		//end the frame
 		ImGui::EndFrame();
@@ -166,9 +164,9 @@ void Application::Proc() {
 
 void Application::Quit() {
 	//clean up after the program
-	for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-		(*it)->OnExit();
-		delete *it;
+	for (auto scenePtr : sceneList) {
+		scenePtr->OnExit();
+		delete scenePtr;
 	}
 	sceneList.clear();
 
@@ -196,43 +194,43 @@ void Application::ProcessEvents() {
 		switch(event.type) {
 			//default
 			case SDL_QUIT:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnQuitEvent();
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnQuitEvent();
 				}
 			break;
 
 			//mouse events
 			case SDL_MOUSEMOTION:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnMouseMotion(event.motion);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnMouseMotion(event.motion);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnMouseButtonDown(event.button);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnMouseButtonDown(event.button);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_MOUSEBUTTONUP:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnMouseButtonUp(event.button);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnMouseButtonUp(event.button);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_MOUSEWHEEL:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnMouseWheel(event.wheel);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnMouseWheel(event.wheel);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
@@ -240,18 +238,18 @@ void Application::ProcessEvents() {
 
 			//keyboard events
 			case SDL_KEYDOWN:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnKeyDown(event.key);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnKeyDown(event.key);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_KEYUP:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnKeyUp(event.key);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnKeyUp(event.key);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
@@ -261,27 +259,27 @@ void Application::ProcessEvents() {
 
 			//controller events
 			case SDL_CONTROLLERAXISMOTION:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnControllerAxisMotion(event.caxis);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnControllerAxisMotion(event.caxis);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_CONTROLLERBUTTONDOWN:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnControllerButtonDown(event.cbutton);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnControllerButtonDown(event.cbutton);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
 			break;
 
 			case SDL_CONTROLLERBUTTONUP:
-				for (std::list<BaseScene*>::iterator it = sceneList.begin(); it != sceneList.end(); it++) {
-					(*it)->OnControllerButtonUp(event.cbutton);
-					if ((*it)->GetBlocking()) {
+				for (auto scenePtr : sceneList) {
+					scenePtr->OnControllerButtonUp(event.cbutton);
+					if (scenePtr->GetBlocking()) {
 						break;
 					}
 				}
@@ -290,9 +288,8 @@ void Application::ProcessEvents() {
 			case SDL_CONTROLLERDEVICEADDED: {
 				SDL_GameController* controller = SDL_GameControllerOpen(event.cdevice.which);
 				if (!controller) {
-					std::cerr << "Could not open game controller " << event.cdevice.which << std::endl;
+					error("Could not open game controller");
 				}
-				std::cout << "Controller added: " << event.cdevice.which << std::endl;
 				gameControllers[event.cdevice.which] = controller;
 			}
 			break;
@@ -300,7 +297,6 @@ void Application::ProcessEvents() {
 			case SDL_CONTROLLERDEVICEREMOVED:
 				SDL_GameControllerClose(gameControllers[event.cdevice.which]);
 				gameControllers.erase(event.cdevice.which);
-				std::cout << "Controller removed: " << event.cdevice.which << std::endl;
 			break;
 
 //			case SDL_CONTROLLERDEVICEREMAPPED:

@@ -11,7 +11,7 @@ public:
 	//node tree
 	NodeBase* AddChild(NodeBase* const);
 	NodeBase* GetChild(int index);
-	void RemoveChild(int index);
+	friend void deleteNode(NodeBase* const);
 
 	NodeBase* GetParent() const { return parent; }
 
@@ -23,10 +23,11 @@ public:
 
 protected:
 	NodeBase* parent = nullptr;
-	std::list<NodeBase*> children;
-};
+	std::list<NodeBase*> children; //TODO: change this to a vector of shared pointers
 
-void deleteNode(NodeBase* const);
+private:
+	void RemoveChild(int index); //WARNING: dangerous, use `deleteNode(root->GetChild(index))` instead
+};
 
 //template definitions
 template<typename T>

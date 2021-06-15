@@ -8,28 +8,25 @@ NodeBase* NodeBase::AddChild(NodeBase* const ptr) {
 
 NodeBase* NodeBase::GetChild(int index) {
 	if (index >= 0) {
-		std::list<NodeBase*>::iterator it;
-		it = children.begin();
+		auto it = children.begin();
 		std::advance(it, index);
 		return *it;
 	} else {
-		std::list<NodeBase*>::reverse_iterator it;
-		it = children.rbegin();
+		auto it = children.rbegin();
 		std::advance(it, -index - 1);
 		return *it;
 	}
 }
 
+//DOCS: RemoveChild DOES NOT delete the decending children
 void NodeBase::RemoveChild(int index) {
 	if (index >= 0) {
-		std::list<NodeBase*>::iterator it;
-		it = children.begin();
+		auto it = children.begin();
 		std::advance(it, index);
 		(*it)->parent = nullptr;
 		children.erase(it);
 	} else {
-		std::list<NodeBase*>::reverse_iterator it;
-		it = children.rbegin();
+		auto it = children.rbegin();
 		std::advance(it, -index - 1);
 		(*it)->parent = nullptr;
 		children.erase(it.base());
@@ -49,4 +46,6 @@ void deleteNode(NodeBase* const root) {
 		root->RemoveChild(0);
 		delete child;
 	}
+
+	delete root;
 }
