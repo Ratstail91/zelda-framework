@@ -45,8 +45,10 @@ void AudioMixer::LoadMusic(const std::string& fname) {
 }
 
 void AudioMixer::UnloadMusic() {
-	Mix_FreeMusic(music);
-	music = nullptr;
+	if (music != nullptr) {
+		Mix_FreeMusic(music);
+		music = nullptr;
+	}
 }
 
 void AudioMixer::PlayMusic() {

@@ -5,7 +5,7 @@ RootScene::RootScene() {
 }
 
 RootScene::~RootScene() {
-	deleteNode(&root);
+	removeDescendantsOfNode(&root);
 }
 
 //frame phases

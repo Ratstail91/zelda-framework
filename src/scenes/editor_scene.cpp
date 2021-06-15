@@ -7,7 +7,7 @@ EditorScene::EditorScene() {
 }
 
 EditorScene::~EditorScene() {
-	deleteNode(&root);
+	removeDescendantsOfNode(&root);
 }
 
 //frame phases

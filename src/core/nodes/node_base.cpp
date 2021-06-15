@@ -12,40 +12,35 @@ NodeBase* NodeBase::GetChild(int index) {
 		std::advance(it, index);
 		return *it;
 	} else {
+		//backwards from the end
 		auto it = children.rbegin();
 		std::advance(it, -index - 1);
 		return *it;
 	}
 }
 
-//DOCS: RemoveChild DOES NOT delete the decending children
 void NodeBase::RemoveChild(int index) {
 	if (index >= 0) {
 		auto it = children.begin();
 		std::advance(it, index);
 		(*it)->parent = nullptr;
+		removeDescendantsOfNode(*it);
+		delete *it;
 		children.erase(it);
 	} else {
+		//backwards from the end
 		auto it = children.rbegin();
 		std::advance(it, -index - 1);
 		(*it)->parent = nullptr;
+		removeDescendantsOfNode(*it.base());
+		delete *it;
 		children.erase(it.base());
 	}
 }
 
-void deleteNode(NodeBase* const root) {
-	while (true) {
-		NodeBase* child = root->GetChild(0);
-
-		if (child == nullptr) {
-			break;
-		}
-
-		deleteNode(child);
-
-		root->RemoveChild(0);
-		delete child;
+void removeDescendantsOfNode(NodeBase* const root) {
+	for (auto childPtr : root->children) {
+		removeDescendantsOfNode(childPtr);
+		delete childPtr;
 	}
-
-	delete root;
 }

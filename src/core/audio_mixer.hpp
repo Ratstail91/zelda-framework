@@ -52,13 +52,13 @@ public:
 private:
 	//for fading (bugfix blocking)
 	friend void fadeMiddle();
-	Mix_Music* second;
+	Mix_Music* second = nullptr;
 	int inMilliseconds;
 
 	static AudioMixer* singleton;
-	AudioMixer() { }
-	~AudioMixer() { }
+	AudioMixer() = default;
+	~AudioMixer() = default;
 
-	Mix_Music* music;
+	Mix_Music* music = nullptr;
 	std::map<const std::string, Mix_Chunk*> chunks;
 };
