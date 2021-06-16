@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
+#include <future>
 #include <string>
 #include <map>
 
@@ -36,10 +37,11 @@ public:
 	//chunk controls
 	void LoadChunk(const std::string& key, const std::string& fname);
 	void UnloadChunk(const std::string& key);
-	int PlayChunk(const std::string& key, int channel = -1);
-	void StopChannel(int i);
+	int PlayChunk(const std::string& key, int channel = -1, int loops = 0);
 	void PauseChannel(int i);
 	void UnpauseChannel(int i);
+	void StopChannel(int i);
+	void StopAllChannels();
 
 	bool GetChunkLoaded(const std::string& key);
 	bool GetChannelPlaying(int i);
@@ -55,10 +57,15 @@ private:
 	Mix_Music* second = nullptr;
 	int inMilliseconds;
 
+	//singleton stuff
 	static AudioMixer* singleton;
 	AudioMixer() = default;
 	~AudioMixer() = default;
 
+	//containers
 	Mix_Music* music = nullptr;
 	std::map<const std::string, Mix_Chunk*> chunks;
+
+	//async stuff
+	std::mutex loadChunkMutex;
 };

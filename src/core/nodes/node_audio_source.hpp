@@ -7,12 +7,13 @@
 
 class NodeAudioSource : public NodeBase {
 public:
-	NodeAudioSource(NodeAudioListener const* const, double);
-	void PlayChunk(std::string const& key);
+	//TODO: more wrapper methods
+	NodeAudioSource(NodeAudioListener const* const, int);
+	void PlayChunk(std::string const& key, int channel = -1, int loops = 0);
 	void CalcVolume();
 
 protected:
 	NodeAudioListener const* listener = nullptr;
-	double maxDistance = 0;
+	int maxDistance = 0;
 	int channel = -1;
 };

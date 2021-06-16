@@ -136,6 +136,7 @@ void AudioMixer::LoadChunk(const std::string& key, const std::string& fname) {
 		error(std::string() + "Failed to load a chunk file " + fname);
 	}
 
+	std::lock_guard<std::mutex> lock(loadChunkMutex);
 	chunks[key] = chunk;
 }
 
@@ -151,14 +152,14 @@ void AudioMixer::UnloadChunk(const std::string& key) {
 	chunks.erase(it);
 }
 
-int AudioMixer::PlayChunk(const std::string& key, int channel) {
+int AudioMixer::PlayChunk(const std::string& key, int channel, int loops) {
 	auto it = chunks.find(key);
 
 	if (it == chunks.end()) {
 		error(std::string() + "Chunk not loaded: " + key);
 	}
 
-	int result = Mix_PlayChannel(channel, it->second, 0);
+	int result = Mix_PlayChannel(channel, it->second, loops);
 
 	if (result == -1) {
 		error(std::string() + "Could not play chunk " + key);
@@ -167,16 +168,24 @@ int AudioMixer::PlayChunk(const std::string& key, int channel) {
 	return result;
 }
 
-void AudioMixer::StopChannel(int i) {
-	Mix_HaltChannel(i);
-}
-
 void AudioMixer::PauseChannel(int i) {
 	Mix_Pause(i);
 }
 
 void AudioMixer::UnpauseChannel(int i) {
 	Mix_Resume(i);
+}
+
+void AudioMixer::StopChannel(int i) {
+	Mix_HaltChannel(i);
+}
+
+void AudioMixer::StopAllChannels() {
+	const int total = Mix_AllocateChannels(-1);
+
+	for (int i = 0; i < total; i++) {
+		StopChannel(i);
+	}
 }
 
 bool AudioMixer::GetChunkLoaded(const std::string& key) {

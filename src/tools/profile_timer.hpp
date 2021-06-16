@@ -15,4 +15,5 @@ public:
 private:
 	std::string name;
 	Clock::time_point startTime;
+	bool stopped = false;
 };

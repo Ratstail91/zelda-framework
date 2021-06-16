@@ -15,6 +15,12 @@ ProfileTimer::~ProfileTimer() {
 void ProfileTimer::Stop() {
 	Clock::time_point stopTime = Clock::now();
 
+	if (stopped) {
+		return;
+	}
+
+	stopped = true;
+
 	Clock::duration duration = stopTime - startTime;
 
 	std::cout << name << ": " << std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() << "ns" << std::endl;

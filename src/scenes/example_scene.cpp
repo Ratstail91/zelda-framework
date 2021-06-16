@@ -1,6 +1,10 @@
 #include "example_scene.hpp"
 
+#include "profile_timer.hpp"
+
+#include <future>
 #include <iostream>
+#include <vector>
 
 ExampleScene::ExampleScene() {
 	//wire up audio nodes
@@ -14,7 +18,11 @@ ExampleScene::ExampleScene() {
 	root.GetChild(0)->AddChild(new NodeTransform());
 	root.GetChild(0)->AddChild(new NodeImage(GetRenderer(), "rsc/thing.png"));
 	root.GetChild(0)->AddChild(new NodeColliderBox());
-	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000));
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000)); // 0
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000)); // 1
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000)); // 2
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000)); // 3
+	root.GetChild(0)->AddChild(new NodeAudioSource(listener, 1000)); // 4
 
 	//dragon
 	root.GetChild(1)->AddChild(new NodeTransform());
@@ -32,22 +40,53 @@ ExampleScene::ExampleScene() {
 		box->SetBoundsToImageSibling();
 	}
 
-	//DEBUG: remove the fairy dragon
-//	root.RemoveChild(1);
+	ProfileTimer timer("threads");
+
+	//DEBUG: test the audio
+	//using threads for a 2% speed increase
+	auto threads = {
+		std::async(std::launch::async, [](){ AudioMixer::GetSingleton().LoadChunk("01-base", "rsc/01_Base.ogg"); }),
+		std::async(std::launch::async, [](){ AudioMixer::GetSingleton().LoadChunk("01-beat", "rsc/01_Beat.ogg"); }),
+		std::async(std::launch::async, [](){ AudioMixer::GetSingleton().LoadChunk("01-lead", "rsc/01_Lead.ogg"); }),
+		std::async(std::launch::async, [](){ AudioMixer::GetSingleton().LoadChunk("01-arp", "rsc/01_ARP.ogg"); }),
+		std::async(std::launch::async, [](){ AudioMixer::GetSingleton().LoadChunk("01-seq", "rsc/01_SEQ.ogg"); })
+	};
+
+	for (auto& thread : threads) {
+		thread.wait();
+	}
+
+	// AudioMixer::GetSingleton().LoadChunk("01-base", "rsc/01_Base.ogg");
+	// AudioMixer::GetSingleton().LoadChunk("01-beat", "rsc/01_Beat.ogg");
+	// AudioMixer::GetSingleton().LoadChunk("01-lead", "rsc/01_Lead.ogg");
+	// AudioMixer::GetSingleton().LoadChunk("01-arp", "rsc/01_ARP.ogg");
+	// AudioMixer::GetSingleton().LoadChunk("01-seq", "rsc/01_SEQ.ogg");
+
+	timer.Stop();
+
+	auto sources = root.GetDescendantsByType<NodeAudioSource>();
+
+	auto iter = sources.begin();
+	(*(iter++))->PlayChunk("01-base", 0, -1);
+//	(*(iter++))->PlayChunk("01-beat", 1, -1);
+	(*(iter++))->PlayChunk("01-lead", 2, -1);
+	(*(iter++))->PlayChunk("01-arp", 3, -1);
+//	(*(iter++))->PlayChunk("01-seq", 4, -1);
 }
 
 ExampleScene::~ExampleScene() {
+	AudioMixer::GetSingleton().StopAllChannels();
+
 	removeDescendantsOfNode(&root);
 }
 
 //control hooks
 void ExampleScene::OnEnter() {
-	AudioMixer::GetSingleton().LoadMusic("rsc/EngineTest.ogg");
-	AudioMixer::GetSingleton().PlayMusic();
+	//
 }
 
 void ExampleScene::OnExit() {
-	AudioMixer::GetSingleton().UnloadMusic();
+	//
 }
 
 //frame phases
@@ -133,11 +172,11 @@ void ExampleScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 
 		case SDLK_m:
 			//toggle music
-			if (AudioMixer::GetSingleton().GetMusicPaused()) {
-				AudioMixer::GetSingleton().UnpauseMusic();
-			} else {
-				AudioMixer::GetSingleton().PauseMusic();
-			}
+			// if (AudioMixer::GetSingleton().GetMusicPaused()) {
+			// 	AudioMixer::GetSingleton().UnpauseMusic();
+			// } else {
+			// 	AudioMixer::GetSingleton().PauseMusic();
+			// }
 		break;
 	}
 }
