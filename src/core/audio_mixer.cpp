@@ -52,7 +52,7 @@ void AudioMixer::UnloadMusic() {
 }
 
 void AudioMixer::PlayMusic() {
-	if (Mix_PlayMusic(music, 0) != 0) {
+	if (Mix_PlayMusic(music, -1) != 0) {
 		error("Failed to play music");
 	}
 }

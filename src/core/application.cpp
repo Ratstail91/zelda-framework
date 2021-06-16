@@ -3,6 +3,7 @@
 #include "audio_mixer.hpp"
 #include "imgui_impl_sdl.h"
 #include "imgui_sdl.h"
+#include "profile_timer.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -103,6 +104,7 @@ void Application::Proc() {
 
 		//simulate the game or give the machine a break
 		if (simTime < realTime) {
+			ProfileTimer("simulation");
 			while(simTime < realTime) {
 				//call the user defined functions
 				for (auto scenePtr : sceneList) {
@@ -135,6 +137,8 @@ void Application::Proc() {
 		else {
 			SDL_Delay(1); //give the machine a break
 		}
+
+		ProfileTimer("renderer");
 
 		//blank the screen (can be disabled for performance)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

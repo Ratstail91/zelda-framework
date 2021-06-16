@@ -33,7 +33,7 @@ ExampleScene::ExampleScene() {
 	}
 
 	//DEBUG: remove the fairy dragon
-	root.RemoveChild(1);
+//	root.RemoveChild(1);
 }
 
 ExampleScene::~ExampleScene() {
@@ -68,7 +68,7 @@ void ExampleScene::OnUpdate() {
 
 void ExampleScene::OnFrameEnd() {
 	//DEBUG: snap the dragon
-	//root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *(root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()) );
+	root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *(root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()) );
 
 	//cache listener positions
 	auto listeners = root.GetDescendantsByType<NodeAudioListener>();
@@ -118,17 +118,17 @@ void ExampleScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 		break;
 
 		case SDLK_SPACE:
-//			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
 		break;
 
 		case SDLK_LEFT:
 		case SDLK_a:
-//			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = -1;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = -1;
 		break;
 
 		case SDLK_RIGHT:
 		case SDLK_d:
-//			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = 1;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = 1;
 		break;
 
 		case SDLK_m:
@@ -152,7 +152,7 @@ void ExampleScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) 
 
 	if (event.which == 0) {
 		if (event.axis == SDL_CONTROLLER_AXIS_LEFTX && std::abs(event.value) > epsilon) {
-//			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = sign(event.value);
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = sign(event.value);
 		}
 	}
 }
@@ -160,7 +160,7 @@ void ExampleScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) 
 void ExampleScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	if (event.which == 0) {
 		if (event.button == SDL_CONTROLLER_BUTTON_A) {
-//			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
 		}
 	}
 }
