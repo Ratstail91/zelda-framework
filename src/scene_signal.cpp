@@ -14,7 +14,6 @@ static void error(const std::string& str) {
 	throw(std::runtime_error(msg.str()));
 }
 
-//TODO: code generation to do this?
 void Application::ProcessSceneSignal(SceneSignal signal) {
 	switch(signal) {
 		case SceneSignal::FIRST: //for the first scene to be loaded

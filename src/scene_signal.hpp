@@ -1,6 +1,5 @@
 #pragma once
 
-//TODO: code generation to handle this?
 enum SceneSignal {
 	//reserved members for internal use
 	POP = -2,
