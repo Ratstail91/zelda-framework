@@ -18,7 +18,7 @@ This project has the following dependencies.
 
 This project includes several external repositories as git submodules under `src/vendor`, and will not build without them.
 
-*While in the root scene, press space to enter the example scene (you may need to wait for the music to load), or tab to enter the editor scene. Press escape to return to the root scene.*
+*While in the root scene, press space to enter the example scene (you may need to wait for the music to load), or tab to enter the editor scene. Press escape to return to the root scene. You can also press 1 for a game of pong.*
 
 # Scene System
 

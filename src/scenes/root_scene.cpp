@@ -49,12 +49,18 @@ void RootScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 			SetSceneSignal(SceneSignal::POP);
 		break;
 
+		//utility scenes
 		case SDLK_SPACE:
 			SetSceneSignal(SceneSignal::EXAMPLE_SCENE);
 		break;
 
 		case SDLK_TAB:
 			SetSceneSignal(SceneSignal::EDITOR_SCENE);
+		break;
+
+		//game scenes
+		case SDLK_1:
+			SetSceneSignal(SceneSignal::PONG_SCENE);
 		break;
 	}
 }

@@ -1,7 +1,5 @@
 #include "example_scene.hpp"
 
-#include "profile_timer.hpp"
-
 #include <future>
 #include <iostream>
 #include <vector>
@@ -40,8 +38,6 @@ ExampleScene::ExampleScene() {
 		box->SetBoundsToImageSibling();
 	}
 
-	ProfileTimer timer("threads");
-
 	//DEBUG: test the audio
 	//using threads for a 2% speed increase
 	auto threads = {
@@ -61,8 +57,6 @@ ExampleScene::ExampleScene() {
 	// AudioMixer::GetSingleton().LoadChunk("01-lead", "rsc/01_Lead.ogg");
 	// AudioMixer::GetSingleton().LoadChunk("01-arp", "rsc/01_ARP.ogg");
 	// AudioMixer::GetSingleton().LoadChunk("01-seq", "rsc/01_SEQ.ogg");
-
-	timer.Stop();
 
 	auto sources = root.GetDescendantsByType<NodeAudioSource>();
 

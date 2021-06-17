@@ -16,6 +16,11 @@ void NodeColliderBox::SetBoundsToImageSibling() {
 }
 
 bool NodeColliderBox::Intersect(NodeColliderBox const& other) {
+	//don't screw yourself
+	if (&other == this) {
+		return false;
+	}
+
 	//get the two boxes
 	ColliderBox me = *this;
 	ColliderBox you = (ColliderBox)other;
@@ -35,7 +40,12 @@ bool NodeColliderBox::Intersect(NodeColliderBox const& other) {
 	return me.Intersect(you);
 }
 
-void NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
+bool NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
+	//don't screw yourself
+	if (&other == this) {
+		return false;
+	}
+
 	//get the two boxes
 	ColliderBox me = *this;
 	ColliderBox you = (ColliderBox)other;
@@ -54,9 +64,11 @@ void NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
 	//jump to the correct position
 	Vector2 jump = me.Snap(you);
 
-	if (jump != 0.0) {
-		*(transform->GetPosition()) += jump;
+	if (jump == 0.0) {
+		return false;
 	}
+
+	*(transform->GetPosition()) += jump;
 
 	if (jump.x != 0.0) {
 		transform->GetMotion()->x = 0;
@@ -65,4 +77,6 @@ void NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
 	if (jump.y != 0.0) {
 		transform->GetMotion()->y = 0;
 	}
+
+	return true;
 }

@@ -238,6 +238,10 @@ void Application::ProcessEvents() {
 
 			//keyboard events
 			case SDL_KEYDOWN:
+				if (event.key.repeat) { //where the hell did this come from?
+					break; //TODO: KeyHeld()
+				}
+
 				for (auto scenePtr : sceneList) {
 					scenePtr->OnKeyDown(event.key);
 					if (scenePtr->GetBlocking()) {

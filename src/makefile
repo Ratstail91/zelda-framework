@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=. core core/nodes scenes tools vendor/imgui vendor/imgui/backends vendor/imgui-sdl
+INCLUDES+=. core core/nodes scenes scenes/pong tools vendor/imgui vendor/imgui/backends vendor/imgui-sdl
 
 #libraries
 #the order of the $(LIBS) is important, at least for MinGW
@@ -20,6 +20,7 @@ CXXSRC=$(wildcard *.cpp) \
 	$(wildcard core/*.cpp) \
 	$(wildcard core/nodes/*.cpp) \
 	$(wildcard scenes/*.cpp) \
+	$(wildcard scenes/pong/*.cpp) \
 	$(wildcard tools/*.cpp) \
 	$(wildcard vendor/imgui/*.cpp) \
 	$(wildcard vendor/imgui/backends/imgui_impl_sdl.cpp) \

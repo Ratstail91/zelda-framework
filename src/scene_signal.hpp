@@ -11,4 +11,5 @@ enum SceneSignal {
 	ROOT_SCENE,
 	EXAMPLE_SCENE,
 	EDITOR_SCENE,
+	PONG_SCENE,
 };

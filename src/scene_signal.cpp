@@ -4,6 +4,7 @@
 #include "root_scene.hpp"
 #include "example_scene.hpp"
 #include "editor_scene.hpp"
+#include "pong_scene.hpp"
 
 #include <sstream>
 #include <stdexcept>
@@ -27,6 +28,10 @@ void Application::ProcessSceneSignal(SceneSignal signal) {
 
 		case SceneSignal::EDITOR_SCENE:
 			sceneList.push_front(new EditorScene());
+		break;
+
+		case SceneSignal::PONG_SCENE:
+			sceneList.push_front(new PongScene());
 		break;
 
 		//add more scenes here
