@@ -3,6 +3,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace std::string_literals;
+
 static void error(const std::string& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
@@ -21,11 +23,11 @@ AudioMixer& AudioMixer::GetSingleton() {
 void AudioMixer::Init() {
 	//Initialize SDL_mixer
 	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 8, 4096) != 0) {
-		error("Failed to open audio");
+		error("Failed to open audio"s);
 	}
 
 	if (Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG) {
-		error("Failed to initialize OGG format");
+		error("Failed to initialize OGG format"s);
 	}
 }
 
@@ -40,7 +42,7 @@ void AudioMixer::LoadMusic(const std::string& fname) {
 	music = Mix_LoadMUS(fname.c_str());
 
 	if (music == nullptr) {
-		error(std::string() + "Failed to load music file " + fname);
+		error("Failed to load music file "s + fname);
 	}
 }
 
@@ -53,7 +55,7 @@ void AudioMixer::UnloadMusic() {
 
 void AudioMixer::PlayMusic() {
 	if (Mix_PlayMusic(music, -1) != 0) {
-		error("Failed to play music");
+		error("Failed to play music"s);
 	}
 }
 
@@ -92,7 +94,7 @@ int AudioMixer::GetMusicVolume() {
 
 void AudioMixer::FadeMusicIn(int ms) {
 	if (Mix_FadeInMusic(music, -1, ms) != 0) {
-		error("Failed to fade in music");
+		error("Failed to fade in music"s);
 	}
 }
 
@@ -114,7 +116,7 @@ void AudioMixer::FadeMusicTo(const std::string& fname, int outMs, int inMs) {
 	second = Mix_LoadMUS(fname.c_str());
 
 	if (second == nullptr) {
-		error(std::string() + "Failed to load music file " + fname);
+		error("Failed to load music file "s + fname);
 	}
 
 	Mix_FadeOutMusic(outMs);
@@ -133,7 +135,7 @@ void AudioMixer::LoadChunk(const std::string& key, const std::string& fname) {
 	Mix_Chunk* chunk = Mix_LoadWAV(fname.c_str());
 
 	if (chunk == nullptr) {
-		error(std::string() + "Failed to load a chunk file " + fname);
+		error("Failed to load a chunk file "s + fname);
 	}
 
 	std::lock_guard<std::mutex> lock(loadChunkMutex);
@@ -156,13 +158,13 @@ int AudioMixer::PlayChunk(const std::string& key, int channel, int loops) {
 	auto it = chunks.find(key);
 
 	if (it == chunks.end()) {
-		error(std::string() + "Chunk not loaded: " + key);
+		error("Chunk not loaded: "s + key);
 	}
 
 	int result = Mix_PlayChannel(channel, it->second, loops);
 
 	if (result == -1) {
-		error(std::string() + "Could not play chunk " + key);
+		error("Could not play chunk "s + key);
 	}
 
 	return result;

@@ -9,7 +9,9 @@
 #include <sstream>
 #include <stdexcept>
 
-static void error(const std::string& str) {
+using namespace std::string_literals;
+
+static void error(std::string const& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
 	throw(std::runtime_error(msg.str()));
@@ -41,7 +43,7 @@ void Application::ProcessSceneSignal(SceneSignal signal) {
 		break;
 
 		default: {
-			error("Failed to recognize the scene signal");
+			error("Failed to recognize the scene signal"s);
 		}
 	}
 }

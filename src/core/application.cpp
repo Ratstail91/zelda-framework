@@ -9,6 +9,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace std::string_literals;
+
 static void error(const std::string& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
@@ -22,7 +24,7 @@ void Application::Init(int argc, char* argv[]) {
 
 	//initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
-		error("Failed to initialize SDL");
+		error("Failed to initialize SDL"s);
 	}
 
 	//create and check the window
@@ -35,12 +37,12 @@ void Application::Init(int argc, char* argv[]) {
 		SDL_WINDOW_RESIZABLE);
 
 	if (!window) {
-		error("Failed to create the window");
+		error("Failed to create the window"s);
 	}
 
 	//create and check the renderer
 	if (!(renderer = SDL_CreateRenderer(window, -1, 0))) {
-		error("Failed to create the renderer");
+		error("Failed to create the renderer"s);
 	}
 
 	//screen scaling
@@ -292,7 +294,7 @@ void Application::ProcessEvents() {
 			case SDL_CONTROLLERDEVICEADDED: {
 				SDL_GameController* controller = SDL_GameControllerOpen(event.cdevice.which);
 				if (!controller) {
-					error("Could not open game controller");
+					error("Could not open game controller"s);
 				}
 				gameControllers[event.cdevice.which] = controller;
 			}

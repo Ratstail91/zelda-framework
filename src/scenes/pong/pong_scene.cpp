@@ -1,20 +1,24 @@
 #include "pong_scene.hpp"
 
 #include <iostream>
+#include <string>
+
+using namespace std::string_literals;
 
 PongScene::PongScene() {
 	//generate the player objects
-	playerOne = GeneratePaddle({-200, 0});
-	playerTwo = GeneratePaddle({200, 0});
+	playerOne = GenerateEntity("rsc/pong_paddle.png"s, {-200, 0}, true);
+	playerTwo = GenerateEntity("rsc/pong_paddle.png"s, {200, 0}, true);
 
 	root.AddChild(playerOne);
 	root.AddChild(playerTwo);
 
-	root.AddChild(GenerateWall({0, -150}));
-	root.AddChild(GenerateWall({0, 150}));
+	//generate the wall objects
+	root.AddChild(GenerateEntity("rsc/pong_wall.png"s, {0, -150}, false));
+	root.AddChild(GenerateEntity("rsc/pong_wall.png"s, {0, 150}, false));
 
-	ball = GenerateBall({0, 0});
-
+	//generate the ball object
+	ball = GenerateEntity("rsc/pong_ball.png"s, {0, 0}, true);
 	root.AddChild(ball);
 
 	//inital movement
@@ -188,52 +192,22 @@ void PongScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 }
 
 //bespoke methods
-NodeBase* PongScene::GeneratePaddle(Vector2 position) {
-	NodeBase* paddleNode = new NodeBase();
+NodeBase* PongScene::GenerateEntity(std::string const& sprite, Vector2 position, bool simulated) {
+	NodeBase* entityNode = new NodeBase();
 
-	paddleNode->AddChild(new NodeTransform());
-	paddleNode->AddChild(new NodeImage(GetRenderer(), "rsc/pong_paddle.png"));
-	paddleNode->AddChild(new NodeColliderBox());
-	paddleNode->AddChild(new NodeActor());
+	entityNode->AddChild(new NodeTransform());
+	entityNode->AddChild(new NodeImage(GetRenderer(), sprite));
+	entityNode->AddChild(new NodeColliderBox());
 
-	//correct the collision box
-	paddleNode->GetFirstChildByType<NodeColliderBox>()->SetBoundsToImageSibling(); //TODO: could this be automatic?
-
-	//correct the position
-	*( paddleNode->GetFirstChildByType<NodeTransform>()->GetPosition() ) = position - paddleNode->GetFirstChildByType<NodeColliderBox>()->center;
-
-	return paddleNode;
-}
-
-NodeBase* PongScene::GenerateWall(Vector2 position) {
-	NodeBase* wallNode = new NodeBase();
-
-	wallNode->AddChild(new NodeTransform());
-	wallNode->AddChild(new NodeImage(GetRenderer(), "rsc/pong_wall.png"));
-	wallNode->AddChild(new NodeColliderBox());
+	if (simulated) {
+		entityNode->AddChild(new NodeActor());
+	}
 
 	//correct the collision box
-	wallNode->GetFirstChildByType<NodeColliderBox>()->SetBoundsToImageSibling(); //TODO: could this be automatic?
+	entityNode->GetFirstChildByType<NodeColliderBox>()->SetBoundsToImageSibling(); //TODO: could this be automatic?
 
 	//correct the position
-	*( wallNode->GetFirstChildByType<NodeTransform>()->GetPosition() ) = position - wallNode->GetFirstChildByType<NodeColliderBox>()->center;
+	*( entityNode->GetFirstChildByType<NodeTransform>()->GetPosition() ) = position - entityNode->GetFirstChildByType<NodeColliderBox>()->center;
 
-	return wallNode;
-}
-
-NodeBase* PongScene::GenerateBall(Vector2 position) {
-	NodeBase* ballNode = new NodeBase();
-
-	ballNode->AddChild(new NodeTransform());
-	ballNode->AddChild(new NodeImage(GetRenderer(), "rsc/pong_ball.png"));
-	ballNode->AddChild(new NodeColliderBox());
-	ballNode->AddChild(new NodeActor());
-
-	//correct the collision box
-	ballNode->GetFirstChildByType<NodeColliderBox>()->SetBoundsToImageSibling(); //TODO: could this be automatic?
-
-	//correct the position
-	*( ballNode->GetFirstChildByType<NodeTransform>()->GetPosition() ) = position - ballNode->GetFirstChildByType<NodeColliderBox>()->center;
-
-	return ballNode;
+	return entityNode;
 }

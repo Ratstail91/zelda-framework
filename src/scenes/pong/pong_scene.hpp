@@ -38,9 +38,7 @@ private:
 
 	//bespoke methods
 	//TODO: these are basically the same...
-	NodeBase* GeneratePaddle(Vector2 position);
-	NodeBase* GenerateWall(Vector2 position);
-	NodeBase* GenerateBall(Vector2 position);
+	NodeBase* GenerateEntity(std::string const& sprite, Vector2 position, bool simulated);
 
 	//entities
 	NodeBase root;

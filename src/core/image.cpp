@@ -5,6 +5,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace std::string_literals;
+
 static void error(const std::string& str) {
 	std::ostringstream msg;
 	msg << str << ": " << SDL_GetError();
@@ -53,20 +55,20 @@ SDL_Texture* Image::Load(SDL_Renderer* const renderer, std::string const& fname)
 	//load the file into a surface
 	SDL_Surface* surface = IMG_Load(fname.c_str());
 	if (!surface) {
-		error(std::string() + "Failed to load an image file " + fname);
+		error("Failed to load an image file "s + fname);
 	}
 
 	//create a texture from this surface
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 	if (!texture) {
-		error(std::string() + "Failed to convert a newly loaded image from a surface to a texture " + fname);
+		error("Failed to convert a newly loaded image from a surface to a texture "s + fname);
 	}
 
 	//set the metadata
 	clip.x = 0;
 	clip.y = 0;
 	if (SDL_QueryTexture(texture, nullptr, nullptr, &clip.w, &clip.h)) {
-		error(std::string() + "Failed to record metadata for a newly loaded image " + fname);
+		error("Failed to record metadata for a newly loaded image "s + fname);
 	}
 	local = true;
 
@@ -86,14 +88,14 @@ SDL_Texture* Image::Create(SDL_Renderer* const renderer, Uint16 w, Uint16 h, SDL
 
 	//check
 	if (!texture) {
-		error("Failed to create a texture for an image");
+		error("Failed to create a texture for an image"s);
 	}
 
 	//set the metadata
 	clip.x = 0;
 	clip.y = 0;
 	if (SDL_QueryTexture(texture, nullptr, nullptr, &clip.w, &clip.h)) {
-		error("Failed to record metadata for a newly created image");
+		error("Failed to record metadata for a newly created image"s);
 	}
 	local = true;
 
@@ -135,7 +137,7 @@ SDL_Texture* Image::SetTexture(SDL_Texture* ptr) {
 	clip.x = 0;
 	clip.y = 0;
 	if (SDL_QueryTexture(texture, nullptr, nullptr, &clip.w, &clip.h)) {
-		error("Failed to record metadata for a newly set image");
+		error("Failed to record metadata for a newly set image"s);
 	}
 	local = false;
 
@@ -157,7 +159,7 @@ void Image::Free() {
 
 void Image::DrawTo(SDL_Renderer* const renderer, Sint16 x, Sint16 y, double scaleX, double scaleY) {
 	if (!texture) {
-		error("No image texture to draw");
+		error("No image texture to draw"s);
 	}
 
 	SDL_Rect sclip = clip;
@@ -167,14 +169,14 @@ void Image::DrawTo(SDL_Renderer* const renderer, Sint16 x, Sint16 y, double scal
 
 void Image::SetAlpha(Uint8 a) {
 	if (SDL_SetTextureAlphaMod(texture, a)) {
-		error("Failed to set alpha of an image");
+		error("Failed to set alpha of an image"s);
 	}
 }
 
 Uint8 Image::GetAlpha() {
 	Uint8 ret = 0;
 	if (SDL_GetTextureAlphaMod(texture, &ret)) {
-		error("Failed to get alpha of an image");
+		error("Failed to get alpha of an image"s);
 	}
 	return ret;
 }
