@@ -3,6 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 
 #include <future>
+#include <mutex>
 #include <string>
 #include <map>
 

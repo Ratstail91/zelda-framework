@@ -2,18 +2,16 @@
 INCLUDES+=. core core/nodes scenes scenes/pong tools vendor/imgui vendor/imgui/backends vendor/imgui-sdl
 
 #libraries
-#the order of the $(LIBS) is important, at least for MinGW
-LIBS+=
-ifeq ($(OS),Windows_NT)
-	LIBS+=-lmingw32 -lSDL2main
+LIBS+=-static-libstdc++ -lpthread
+ifeq (commandline,${whichshell}) #I think I've screwed with my windows shell too much
+	LIBS+=-lmingw32
+else
+	LIBS+=-lcygwin
 endif
-ifeq ($(shell uname), Linux)
-	LIBS+=-static-libstdc++ -lpthread
-endif
-LIBS+=-lSDL2 -lSDL2_image -lSDL2_mixer
+LIBS+=-lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lole32 -loleaut32 -limm32 -lwinmm
 
 #flags
-CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES)) -Wno-psabi
+CXXFLAGS+=-std=c++17 $(addprefix -I,$(INCLUDES)) -Wno-psabi `sdl2-config --cflags --libs` -mwindows
 
 #source
 CXXSRC=$(wildcard *.cpp) \
