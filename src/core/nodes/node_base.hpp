@@ -5,9 +5,6 @@
 
 class NodeBase {
 public:
-	NodeBase() = default;
-	virtual ~NodeBase() = default;
-
 	//node tree
 	NodeBase* AddChild(NodeBase* const);
 	NodeBase* GetChild(int index);
@@ -23,6 +20,9 @@ public:
 	T* GetFirstChildByType();
 
 protected:
+	NodeBase() = default;
+	virtual ~NodeBase() = default;
+
 	NodeBase* parent = nullptr;
 	std::list<NodeBase*> children;
 };

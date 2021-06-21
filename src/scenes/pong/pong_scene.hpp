@@ -2,7 +2,7 @@
 
 #include "base_scene.hpp"
 
-#include "node_base.hpp"
+#include "node.hpp"
 #include "node_transform.hpp"
 #include "node_image.hpp"
 #include "node_collider_box.hpp"
@@ -38,12 +38,12 @@ private:
 
 	//bespoke methods
 	//TODO: these are basically the same...
-	NodeBase* GenerateEntity(std::string const& sprite, Vector2 position, bool simulated);
+	Node* GenerateEntity(std::string const& sprite, Vector2 position, bool simulated);
 
 	//entities
-	NodeBase root;
+	Node root;
 
-	NodeBase* playerOne;
-	NodeBase* playerTwo;
-	NodeBase* ball;
+	Node* playerOne;
+	Node* playerTwo;
+	Node* ball;
 };

@@ -1,6 +1,14 @@
 #include "node_base.hpp"
 
+#include <stdexcept>
+
 NodeBase* NodeBase::AddChild(NodeBase* const ptr) {
+	for (NodeBase* it = parent; it != nullptr; it = it->parent) {
+		if (it == ptr) {
+			std::logic_error("Looping hierarchy found");
+		}
+	}
+
 	children.push_back(ptr);
 	ptr->parent = this;
 	return ptr;

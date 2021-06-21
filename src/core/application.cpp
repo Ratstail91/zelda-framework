@@ -29,7 +29,7 @@ void Application::Init(int argc, char* argv[]) {
 
 	//create and check the window
 	window = SDL_CreateWindow(
-		"Example Caption",
+		"Example Caption", //TODO: some way to set the caption
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		screenWidth,

@@ -47,3 +47,18 @@ NodeActor:       NodeTransform
 `AudioMixer` is built on SDL2_mixer, and supports two types of sound: music and chunks. Music is designed for streaming audio directly from the file; the tool can only support one music file at a time. Chunks are separate pieces of sound effects which need to be loaded into memory in their entirety before use. `NodeAudioListener` and `NodeAudioSource` both utilize this tool.
 
 `CameraBase` can be used for cameras, such as `CameraEditor`, and also supports updates in the same fashon as `NodeTransform`.
+
+# Planned and Current Games
+
+I'm planning on implementing some simple games to push the feature set forward. These games can be accessed by pressing the following numbers (or unimplemented games are marked with a *):
+
+1. Pong
+*. Snake
+*. Asteroids
+*. Boulderdash
+*. Tetris
+*. Panel De Pon
+*. Tower Blocks
+
+# Feedback I'll Work On Soon
+

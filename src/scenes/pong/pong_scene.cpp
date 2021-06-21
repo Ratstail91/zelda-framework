@@ -22,7 +22,7 @@ PongScene::PongScene() {
 	root.AddChild(ball);
 
 	//inital movement
-	*( ball->GetFirstChildByType<NodeTransform>()->GetMotion() ) = {2, 2};
+	ball->GetFirstChildByType<NodeTransform>()->GetMotion() = {2, 2};
 }
 
 PongScene::~PongScene() {
@@ -55,7 +55,7 @@ void PongScene::OnFrameEnd() {
 			//who did I collide with?
 			if (playerOne->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox) || playerTwo->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox)) {
 				//you collided with a paddle; bounce back faster
-				ball->GetFirstChildByType<NodeTransform>()->GetMotion()->x *= -1.1;
+				ball->GetFirstChildByType<NodeTransform>()->GetMotion().x *= -1.1;
 
 				//simulate one step out of the paddle
 				ball->GetFirstChildByType<NodeActor>()->Update({0, 0}, 0.0);
@@ -66,14 +66,14 @@ void PongScene::OnFrameEnd() {
 					ball->GetFirstChildByType<NodeActor>()->Rewind({0, 0}, 0.0);
 
 					//reverse both directions (flipping the prior reverse)
-					*( ball->GetFirstChildByType<NodeTransform>()->GetMotion() ) *= -1;
+					ball->GetFirstChildByType<NodeTransform>()->GetMotion() *= -1;
 
 					//redo the update
 					ball->GetFirstChildByType<NodeActor>()->Update({0, 0}, 0.0);
 				}
 			} else {
 				//you collided with a regular wall
-				ball->GetFirstChildByType<NodeTransform>()->GetMotion()->y *= -1;
+				ball->GetFirstChildByType<NodeTransform>()->GetMotion().y *= -1;
 			}
 		}
 	}
@@ -126,19 +126,19 @@ void PongScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 		break;
 
 		case SDLK_w:
-			playerOne->GetFirstChildByType<NodeTransform>()->GetMotion()->y -= 3;
+			playerOne->GetFirstChildByType<NodeTransform>()->GetMotion().y -= 3;
 		break;
 
 		case SDLK_s:
-			playerOne->GetFirstChildByType<NodeTransform>()->GetMotion()->y += 3;
+			playerOne->GetFirstChildByType<NodeTransform>()->GetMotion().y += 3;
 		break;
 
 		case SDLK_UP:
-			playerTwo->GetFirstChildByType<NodeTransform>()->GetMotion()->y -= 3;
+			playerTwo->GetFirstChildByType<NodeTransform>()->GetMotion().y -= 3;
 		break;
 
 		case SDLK_DOWN:
-			playerTwo->GetFirstChildByType<NodeTransform>()->GetMotion()->y += 3;
+			playerTwo->GetFirstChildByType<NodeTransform>()->GetMotion().y += 3;
 		break;
 	}
 }
@@ -147,32 +147,32 @@ void PongScene::OnKeyUp(SDL_KeyboardEvent const& event) {
 	switch(event.keysym.sym) {
 		case SDLK_w: {
 			NodeTransform* transform = playerOne->GetFirstChildByType<NodeTransform>();
-			if (transform->GetMotion()->y < 0) {
-				transform->GetMotion()->y = 0;
+			if (transform->GetMotion().y < 0) {
+				transform->GetMotion().y = 0;
 			}
 		}
 		break;
 
 		case SDLK_s: {
 			NodeTransform* transform = playerOne->GetFirstChildByType<NodeTransform>();
-			if (transform->GetMotion()->y > 0) {
-				transform->GetMotion()->y = 0;
+			if (transform->GetMotion().y > 0) {
+				transform->GetMotion().y = 0;
 			}
 		}
 		break;
 
 		case SDLK_UP: {
 			NodeTransform* transform = playerTwo->GetFirstChildByType<NodeTransform>();
-			if (transform->GetMotion()->y < 0) {
-				transform->GetMotion()->y = 0;
+			if (transform->GetMotion().y < 0) {
+				transform->GetMotion().y = 0;
 			}
 		}
 		break;
 
 		case SDLK_DOWN: {
 			NodeTransform* transform = playerTwo->GetFirstChildByType<NodeTransform>();
-			if (transform->GetMotion()->y > 0) {
-				transform->GetMotion()->y = 0;
+			if (transform->GetMotion().y > 0) {
+				transform->GetMotion().y = 0;
 			}
 		}
 		break;
@@ -192,8 +192,8 @@ void PongScene::OnControllerButtonUp(SDL_ControllerButtonEvent const& event) {
 }
 
 //bespoke methods
-NodeBase* PongScene::GenerateEntity(std::string const& sprite, Vector2 position, bool simulated) {
-	NodeBase* entityNode = new NodeBase();
+Node* PongScene::GenerateEntity(std::string const& sprite, Vector2 position, bool simulated) {
+	Node* entityNode = new Node();
 
 	entityNode->AddChild(new NodeTransform());
 	entityNode->AddChild(new NodeImage(GetRenderer(), sprite));
@@ -207,7 +207,7 @@ NodeBase* PongScene::GenerateEntity(std::string const& sprite, Vector2 position,
 	entityNode->GetFirstChildByType<NodeColliderBox>()->SetBoundsToImageSibling(); //TODO: could this be automatic?
 
 	//correct the position
-	*( entityNode->GetFirstChildByType<NodeTransform>()->GetPosition() ) = position - entityNode->GetFirstChildByType<NodeColliderBox>()->center;
+	entityNode->GetFirstChildByType<NodeTransform>()->GetPosition() = position - entityNode->GetFirstChildByType<NodeColliderBox>()->center;
 
 	return entityNode;
 }

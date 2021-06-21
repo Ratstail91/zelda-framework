@@ -14,7 +14,7 @@ Vector2 NodeTransform::GetWorldPosition() {
 		}
 
 		if (t != nullptr) {
-			w += *t->GetPosition();
+			w += t->GetPosition();
 			p = p->GetParent();
 		}
 	}
@@ -36,7 +36,7 @@ Vector2 NodeTransform::GetWorldMotion() {
 		}
 
 		if (t != nullptr) {
-			w += *t->GetMotion();
+			w += t->GetMotion();
 			p = p->GetParent();
 		}
 	}
@@ -58,7 +58,7 @@ Vector2 NodeTransform::GetWorldScale() {
 		}
 
 		if (t != nullptr) {
-			w *= *t->GetScale();
+			w *= t->GetScale();
 			p = p->GetParent();
 		}
 	}

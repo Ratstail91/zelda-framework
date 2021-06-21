@@ -2,7 +2,7 @@
 
 #include "base_scene.hpp"
 
-#include "node_base.hpp"
+#include "node.hpp"
 #include "node_transform.hpp"
 #include "node_actor.hpp"
 #include "node_image.hpp"
@@ -46,7 +46,7 @@ private:
 	void OnControllerButtonUp(SDL_ControllerButtonEvent const& event) override;
 
 	//members
-	NodeBase root;
+	Node root;
 	CameraEditor camera;
 
 	//debugging

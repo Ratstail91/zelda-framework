@@ -2,11 +2,7 @@
 
 #include "base_scene.hpp"
 
-#include "node_base.hpp"
-#include "node_transform.hpp"
-#include "node_actor.hpp"
-#include "node_image.hpp"
-#include "node_collider_box.hpp"
+#include "node.hpp"
 
 class RootScene : public BaseScene {
 public:
@@ -37,5 +33,5 @@ private:
 	void OnControllerButtonUp(SDL_ControllerButtonEvent const& event) override;
 
 	//debugging
-	NodeBase root;
+	Node root;
 };

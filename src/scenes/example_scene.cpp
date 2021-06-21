@@ -9,8 +9,8 @@ ExampleScene::ExampleScene() {
 	NodeAudioListener* listener = new NodeAudioListener();
 
 	//fill the tree
-	root.AddChild(new NodeBase()); //thing
-	root.AddChild(new NodeBase()); //dragon
+	root.AddChild(new Node()); //thing
+	root.AddChild(new Node()); //dragon
 
 	//ground
 	root.GetChild(0)->AddChild(new NodeTransform());
@@ -30,7 +30,7 @@ ExampleScene::ExampleScene() {
 	root.GetChild(1)->AddChild(listener);
 
 	//position the ground
-	((NodeTransform*)(root.GetChild(0)->GetChild(0)))->GetPosition()->y = 400;
+	((NodeTransform*)(root.GetChild(0)->GetChild(0)))->GetPosition().y = 400;
 
 	//correct the positions of the colliders
 	std::list<NodeColliderBox*> colliderBoxes = root.GetDescendantsByType<NodeColliderBox>();
@@ -122,7 +122,7 @@ void ExampleScene::OnRenderFrame(SDL_Renderer* renderer) {
 	auto images = root.GetDescendantsByType<NodeImage>();
 
 	for (auto imageNode : images) {
-		imageNode->DrawTo(renderer, camera.GetPosition()->x, camera.GetPosition()->y, camera.GetScale()->x, camera.GetScale()->y);
+		imageNode->DrawTo(renderer, camera.GetPosition().x, camera.GetPosition().y, camera.GetScale().x, camera.GetScale().y);
 	}
 }
 
@@ -151,17 +151,17 @@ void ExampleScene::OnKeyDown(SDL_KeyboardEvent const& event) {
 		break;
 
 		case SDLK_SPACE:
-			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion().y = -8;
 		break;
 
 		case SDLK_LEFT:
 		case SDLK_a:
-			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = -1;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion().x = -1;
 		break;
 
 		case SDLK_RIGHT:
 		case SDLK_d:
-			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = 1;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion().x = 1;
 		break;
 
 		case SDLK_m:
@@ -185,7 +185,7 @@ void ExampleScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) 
 
 	if (event.which == 0) {
 		if (event.axis == SDL_CONTROLLER_AXIS_LEFTX && std::abs(event.value) > epsilon) {
-			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->x = sign(event.value);
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion().x = sign(event.value);
 		}
 	}
 }
@@ -193,7 +193,7 @@ void ExampleScene::OnControllerAxisMotion(SDL_ControllerAxisEvent const& event) 
 void ExampleScene::OnControllerButtonDown(SDL_ControllerButtonEvent const& event) {
 	if (event.which == 0) {
 		if (event.button == SDL_CONTROLLER_BUTTON_A) {
-			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion()->y = -8;
+			root.GetChild(1)->GetFirstChildByType<NodeTransform>()->GetMotion().y = -8;
 		}
 	}
 }

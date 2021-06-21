@@ -29,11 +29,11 @@ bool NodeColliderBox::Intersect(NodeColliderBox const& other) {
 	NodeTransform* otherTransform = other.GetParent()->GetFirstChildByType<NodeTransform>();
 
 	if (transform != nullptr) {
-		me += *(transform->GetPosition());
+		me += transform->GetPosition();
 	}
 
 	if (otherTransform != nullptr) {
-		you += *(otherTransform->GetPosition());
+		you += otherTransform->GetPosition();
 	}
 
 	//do we intersect?
@@ -54,11 +54,11 @@ bool NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
 	NodeTransform* otherTransform = other.GetParent()->GetFirstChildByType<NodeTransform>();
 
 	if (transform != nullptr) {
-		me += *(transform->GetPosition());
+		me += transform->GetPosition();
 	}
 
 	if (otherTransform != nullptr) {
-		you += *(otherTransform->GetPosition());
+		you += otherTransform->GetPosition();
 	}
 
 	//jump to the correct position
@@ -68,14 +68,14 @@ bool NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
 		return false;
 	}
 
-	*(transform->GetPosition()) += jump;
+	transform->GetPosition() += jump;
 
 	if (jump.x != 0.0) {
-		transform->GetMotion()->x = 0;
+		transform->GetMotion().x = 0;
 	}
 
 	if (jump.y != 0.0) {
-		transform->GetMotion()->y = 0;
+		transform->GetMotion().y = 0;
 	}
 
 	return true;
