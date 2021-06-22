@@ -4,3 +4,6 @@
 [submodule "src/vendor/imgui-sdl"]
 	path = src/vendor/imgui-sdl
 	url = https://github.com/Ratstail91/imgui_sdl.git
+[submodule "src/vendor/colliders"]
+	path = src/vendor/colliders
+	url = https://github.com/Ratstail91/colliders
