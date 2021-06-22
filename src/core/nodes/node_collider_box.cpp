@@ -15,68 +15,52 @@ void NodeColliderBox::SetBoundsToImageSibling() {
 	}
 }
 
-bool NodeColliderBox::Intersect(NodeColliderBox const& other) {
-	//don't screw yourself
-	if (&other == this) {
-		return false;
-	}
-
-	//get the two boxes
-	ColliderBox me = *this;
-	ColliderBox you = (ColliderBox)other;
-
+ColliderBox NodeColliderBox::GetWorldColliderBox() {
 	NodeTransform* transform = parent->GetFirstChildByType<NodeTransform>();
-	NodeTransform* otherTransform = other.GetParent()->GetFirstChildByType<NodeTransform>();
 
 	if (transform != nullptr) {
-		me += transform->GetPosition();
+		//adjust self based on transform's position
+		return *this + transform->GetWorldPosition();
 	}
-
-	if (otherTransform != nullptr) {
-		you += otherTransform->GetPosition();
-	}
-
-	//do we intersect?
-	return me.Intersect(you);
+	return *this;
 }
 
-bool NodeColliderBox::SnapCollide(NodeColliderBox const& other) {
-	//don't screw yourself
-	if (&other == this) {
-		return false;
+void NodeColliderBox::SnapCollideWorldBox(ColliderBox const& otherWorldBox) {
+	ColliderBox thisWorldBox = GetWorldColliderBox();
+
+	//do nothing if no intersection
+	if (!Intersect(thisWorldBox, otherWorldBox)) {
+		return;
 	}
 
-	//get the two boxes
-	ColliderBox me = *this;
-	ColliderBox you = (ColliderBox)other;
+	//snap to the closest position outside of other
+	double jumpX = thisWorldBox.halfSize.x + otherWorldBox.halfSize.x - fabs(thisWorldBox.center.x - otherWorldBox.center.x);
+	double jumpY = thisWorldBox.halfSize.y + otherWorldBox.halfSize.y - fabs(thisWorldBox.center.y - otherWorldBox.center.y);
 
+	Vector2 jump;
+
+	//floating ABS
+	if (fabs(jumpX) < fabs(jumpY)) {
+		//multiply by direction
+		jump = Vector2(jumpX, 0) * (thisWorldBox.center.x > otherWorldBox.center.x ? 1 : -1);
+	} else {
+		//multiply by direction
+		jump = Vector2(0, jumpY) * (thisWorldBox.center.y > otherWorldBox.center.y ? 1 : -1);
+	}
+
+	//get the transform and actually jump
 	NodeTransform* transform = parent->GetFirstChildByType<NodeTransform>();
-	NodeTransform* otherTransform = other.GetParent()->GetFirstChildByType<NodeTransform>();
 
 	if (transform != nullptr) {
-		me += transform->GetPosition();
+		transform->GetPosition() += jump;
+
+		//stop motion in that direction
+		if (jump.x != 0.0) {
+			transform->GetMotion().x = 0;
+		}
+
+		if (jump.y != 0.0) {
+			transform->GetMotion().y = 0;
+		}
 	}
-
-	if (otherTransform != nullptr) {
-		you += otherTransform->GetPosition();
-	}
-
-	//jump to the correct position
-	Vector2 jump = me.Snap(you);
-
-	if (jump == 0.0) {
-		return false;
-	}
-
-	transform->GetPosition() += jump;
-
-	if (jump.x != 0.0) {
-		transform->GetMotion().x = 0;
-	}
-
-	if (jump.y != 0.0) {
-		transform->GetMotion().y = 0;
-	}
-
-	return true;
 }

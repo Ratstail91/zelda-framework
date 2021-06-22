@@ -101,7 +101,7 @@ void ExampleScene::OnUpdate() {
 
 void ExampleScene::OnFrameEnd() {
 	//DEBUG: snap the dragon
-	root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *(root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()) );
+	root.GetChild(1)->GetFirstChildByType<NodeColliderBox>()->SnapCollideWorldBox( root.GetChild(0)->GetFirstChildByType<NodeColliderBox>()->GetWorldColliderBox() );
 
 	//cache listener positions
 	auto listeners = root.GetDescendantsByType<NodeAudioListener>();

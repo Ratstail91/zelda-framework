@@ -50,18 +50,28 @@ void PongScene::OnFrameEnd() {
 
 	//bounce the ball against all objects
 	NodeColliderBox* ballBox = ball->GetFirstChildByType<NodeColliderBox>();
+	ColliderBox ballWorldBox = ballBox->GetWorldColliderBox();
+	ColliderBox playerOneWorldBox = playerOne->GetFirstChildByType<NodeColliderBox>()->GetWorldColliderBox();
+	ColliderBox playerTwoWorldBox = playerTwo->GetFirstChildByType<NodeColliderBox>()->GetWorldColliderBox();
+
 	for (auto box : boxes) {
-		if (ballBox->Intersect(*box)) {
+		ColliderBox worldBox = box->GetWorldColliderBox();
+
+		//dont interact with yourself && collision
+		if (ballBox != box && Intersect(ballWorldBox, worldBox)) {
 			//who did I collide with?
-			if (playerOne->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox) || playerTwo->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox)) {
+			if (Intersect(playerOneWorldBox, ballWorldBox) || Intersect(playerTwoWorldBox, ballWorldBox)) {
 				//you collided with a paddle; bounce back faster
 				ball->GetFirstChildByType<NodeTransform>()->GetMotion().x *= -1.1;
 
 				//simulate one step out of the paddle
 				ball->GetFirstChildByType<NodeActor>()->Update({0, 0}, 0.0);
 
+				//update the ball world box (local var)
+				ballWorldBox = ballBox->GetWorldColliderBox();
+
 				//BUGFIX: keep the ball out of the paddle sides
-				if (playerOne->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox) || playerTwo->GetFirstChildByType<NodeColliderBox>()->Intersect(*ballBox)) {
+				if (Intersect(playerOneWorldBox, ballWorldBox) || Intersect(playerTwoWorldBox, ballWorldBox)) {
 					//undo the update
 					ball->GetFirstChildByType<NodeActor>()->Rewind({0, 0}, 0.0);
 
@@ -70,6 +80,9 @@ void PongScene::OnFrameEnd() {
 
 					//redo the update
 					ball->GetFirstChildByType<NodeActor>()->Update({0, 0}, 0.0);
+
+					//update the ball world box (local var)
+					ballWorldBox = ballBox->GetWorldColliderBox();
 				}
 			} else {
 				//you collided with a regular wall
@@ -80,12 +93,15 @@ void PongScene::OnFrameEnd() {
 
 	//correct for the paddle collisions
 	for (auto box : boxes) {
-		if (box == ballBox) {
+		//not the ball && not a player
+		if (box == ballBox || box == playerOne->GetFirstChildByType<NodeColliderBox>() || box == playerTwo->GetFirstChildByType<NodeColliderBox>()) {
 			continue;
 		}
 
-		playerOne->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *box );
-		playerTwo->GetFirstChildByType<NodeColliderBox>()->SnapCollide( *box );
+		ColliderBox worldBox = box->GetWorldColliderBox();
+
+		playerOne->GetFirstChildByType<NodeColliderBox>()->SnapCollideWorldBox( worldBox );
+		playerTwo->GetFirstChildByType<NodeColliderBox>()->SnapCollideWorldBox( worldBox );
 	}
 }
 

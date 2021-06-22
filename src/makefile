@@ -1,5 +1,5 @@
 #include directories
-INCLUDES+=. core core/nodes scenes scenes/pong tools vendor/imgui vendor/imgui/backends vendor/imgui-sdl
+INCLUDES+=. core core/nodes scenes scenes/pong tools vendor/colliders vendor/imgui vendor/imgui/backends vendor/imgui-sdl
 
 #libraries
 LIBS+=-static-libstdc++ -lpthread
@@ -20,6 +20,7 @@ CXXSRC=$(wildcard *.cpp) \
 	$(wildcard scenes/*.cpp) \
 	$(wildcard scenes/pong/*.cpp) \
 	$(wildcard tools/*.cpp) \
+	$(wildcard vendor/colliders/*.cpp) \
 	$(wildcard vendor/imgui/*.cpp) \
 	$(wildcard vendor/imgui/backends/imgui_impl_sdl.cpp) \
 	$(wildcard vendor/imgui-sdl/imgui_sdl.cpp)
