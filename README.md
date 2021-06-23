@@ -52,13 +52,15 @@ NodeActor:       NodeTransform
 
 I'm planning on implementing some simple games to push the feature set forward. These games can be accessed by pressing the following numbers (or unimplemented games are marked with a *):
 
-1. Pong
-*. Snake
-*. Asteroids
-*. Boulderdash
-*. Tetris
-*. Panel De Pon
-*. Tower Blocks
+1. Pong  
+*. Snake  
+*. Bullet hell  
+*. Boulderdash  
+*. Tetris  
+*. Panel De Pon  
+*. Tower Blocks  
 
 # Feedback I'll Work On Soon
+
+...
 

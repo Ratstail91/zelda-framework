@@ -7,10 +7,7 @@
 #Output directory
 OUTDIR=out
 
-#Windows-specific .dll files
-BINDIR=bin
-
-all: $(OUTDIR)
+all: $(OUTDIR) binary
 	$(MAKE) -C src
 
 debug: export CXXFLAGS+=-g
@@ -20,6 +17,12 @@ release: export CXXFLAGS+=-O2
 release: clean all
 
 rebuild: clean all
+
+#For use on my machine ONLY (I have a bin directory with all of the .dlls next to this repo)
+binary: $(OUTDIR)
+ifeq ($(OS),Windows_NT)
+	xcopy /Y "..\bin\*.dll" $(OUTDIR)
+endif
 
 $(OUTDIR):
 	mkdir $(OUTDIR)
